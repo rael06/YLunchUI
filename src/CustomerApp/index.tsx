@@ -1,5 +1,13 @@
-import React from "react";
+import CustomerContent from "./components/CustomerContent";
+import CustomerFooter from "./CustomerFooter";
+import CustomerHeader from "./CustomerHeader";
 
 export default function CustomerApp() {
-  return <div>Customer app</div>;
+  return (
+    <>
+      <CustomerHeader />
+      <CustomerContent />
+      <CustomerFooter />
+    </>
+  );
 }
