@@ -1,22 +1,23 @@
 import { Button, TextField } from "@material-ui/core";
 import React from "react";
+import { useMutation, useQueryClient } from "react-query";
+import { loginApi } from "../services/api/api";
+import { LoginRequestDto, TokenReadDto } from "../services/api/types";
 import classes from "./styles.module.scss";
 
 export default function LoginPage() {
   const [email, setEmail] = React.useState("admin@restaurant.com");
   const [password, setPassword] = React.useState("Password1234.");
 
+  const mutation = useMutation((login: LoginRequestDto) => loginApi(login), {
+    onSuccess: () => {
+      console.log("success");
+    },
+  });
+
   function handleClick() {
-    console.log(email);
-    console.log(password);
     const body = { email, password };
-    fetch("https://ylunch-api.rael-calitro.ovh/authentication/login", {
-      method: "post",
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-      body: JSON.stringify(body),
-    });
+    mutation.mutate(body);
   }
 
   return (
