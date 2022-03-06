@@ -1,5 +1,13 @@
-import React from "react";
+import Content from "./components/Content";
+import Footer from "./Footer";
+import Header from "./Header";
 
 export default function CustomerApp() {
-  return <div>Customer app</div>;
+  return (
+    <>
+      <Header />
+      <Content />
+      <Footer />
+    </>
+  );
 }
