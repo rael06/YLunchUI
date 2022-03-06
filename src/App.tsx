@@ -3,17 +3,22 @@ import CustomerApp from "./CustomerApp";
 import LoginPage from "./LoginPage";
 import NotFoundPage from "./NotFoundPage";
 import RestaurantApp from "./RestaurantApp";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient();
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="customer" element={<CustomerApp />} />
-        <Route path="restaurant-administration" element={<RestaurantApp />} />
-        <Route path="login" element={<LoginPage />} />
-        <Route path="/" element={<Navigate to="/customer" />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="customer" element={<CustomerApp />} />
+          <Route path="restaurant-administration" element={<RestaurantApp />} />
+          <Route path="login" element={<LoginPage />} />
+          <Route path="/" element={<Navigate to="/customer" />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 }
