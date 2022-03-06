@@ -1,13 +1,13 @@
-import CustomerContent from "./components/CustomerContent";
-import CustomerFooter from "./CustomerFooter";
-import CustomerHeader from "./CustomerHeader";
+import Content from "./components/Content";
+import Footer from "./Footer";
+import Header from "./Header";
 
 export default function CustomerApp() {
   return (
     <>
-      <CustomerHeader />
-      <CustomerContent />
-      <CustomerFooter />
+      <Header />
+      <Content />
+      <Footer />
     </>
   );
 }
