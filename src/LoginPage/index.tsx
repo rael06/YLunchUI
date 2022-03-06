@@ -1,8 +1,12 @@
 import { Button, TextField } from "@material-ui/core";
 import React from "react";
-import { useMutation, useQueryClient } from "react-query";
-import { loginApi } from "../services/api/api";
-import { LoginRequestDto, TokenReadDto } from "../services/api/types";
+import { useMutation } from "react-query";
+import { loginApi } from "../services/api";
+import {
+  ApiError,
+  isValidationError,
+  LoginRequestDto,
+} from "../services/api/types";
 import classes from "./styles.module.scss";
 
 export default function LoginPage() {
@@ -12,6 +16,10 @@ export default function LoginPage() {
   const mutation = useMutation((login: LoginRequestDto) => loginApi(login), {
     onSuccess: () => {
       console.log("success");
+    },
+    onError: (error: ApiError) => {
+      if (isValidationError(error)) console.log(error.errors);
+      else console.log(error.message);
     },
   });
 
