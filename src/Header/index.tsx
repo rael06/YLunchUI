@@ -8,7 +8,7 @@ export default function Header() {
       <Link to="/">
         <img src={logo} alt="Logo Ylunch" className={classes.logo} />
       </Link>
-      <Link to="/login">Login</Link>
+      <Link to="/login">Connexion</Link>
     </header>
   );
 }
