@@ -1,7 +1,7 @@
-import { Container, Box } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import logo from "./YLunch-logo.png";
 import classes from "./styles.module.scss";
+import { Box, Container } from "@mui/material";
 
 export default function Header() {
   return (

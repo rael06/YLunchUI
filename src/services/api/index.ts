@@ -1,5 +1,5 @@
 import subSeconds from "date-fns/subSeconds";
-import { parse } from "../jwtToken";
+import { parse } from "../JwtToken";
 import * as localStorage from "../localStorage";
 import { ApiError, LoginRequestDto } from "./types";
 
