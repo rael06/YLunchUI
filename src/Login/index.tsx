@@ -9,7 +9,7 @@ import {
 } from "../services/api/types";
 import classes from "./styles.module.scss";
 
-export default function LoginPage() {
+export default function Login() {
   const [email, setEmail] = React.useState("admin@restaurant.com");
   const [password, setPassword] = React.useState("Password1234.");
 

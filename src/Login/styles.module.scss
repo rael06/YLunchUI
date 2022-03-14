@@ -1,0 +1,8 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  :nth-child(n) {
+    margin-top: 10px;
+  }
+}
