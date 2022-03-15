@@ -1,7 +1,7 @@
 import subSeconds from "date-fns/subSeconds";
 import { parse } from "../JwtToken";
 import * as localStorage from "../localStorage";
-import { ApiError, LoginRequestDto } from "./types";
+import { ApiError, ErrorDto, LoginRequestDto } from "./types";
 
 // const apiUrl = "http://localhost:5254";
 const apiUrl = "https://ylunch-api.rael-calitro.ovh";
@@ -41,8 +41,10 @@ async function assertSuccess(response: Response) {
   if (response.status < 400) {
     return;
   }
-  const error = await response.json();
-  throw error as ApiError;
+  const errorDto = (await response.json()) as ErrorDto;
+  const { title, status, errors } = errorDto;
+  const error = { message: title, title, status, errors } as ApiError;
+  throw error;
 }
 
 export async function loginApi(login: LoginRequestDto): Promise<void> {

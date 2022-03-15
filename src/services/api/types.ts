@@ -12,12 +12,14 @@ export type MessageDto = {
   message: string;
 };
 
-export type ValidationError = {
+export type ErrorDto = {
+  title: string;
+  status: number;
   errors: Record<string, string[]>;
 };
 
-export type ApiError = MessageDto | ValidationError;
-
-export function isValidationError(error: ApiError): error is ValidationError {
-  return "errors" in error && "title" in error;
+export interface ApiError extends Error {
+  title: string;
+  status: number;
+  errors: Record<string | "reasons", string[]>;
 }

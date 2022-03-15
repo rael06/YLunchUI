@@ -2,11 +2,7 @@ import { Button, TextField } from "@mui/material";
 import React from "react";
 import { useMutation } from "react-query";
 import { loginApi } from "../services/api";
-import {
-  ApiError,
-  isValidationError,
-  LoginRequestDto,
-} from "../services/api/types";
+import { ApiError, LoginRequestDto } from "../services/api/types";
 import classes from "./styles.module.scss";
 
 export default function Login() {
@@ -15,11 +11,10 @@ export default function Login() {
 
   const mutation = useMutation((login: LoginRequestDto) => loginApi(login), {
     onSuccess: () => {
-      console.log("success");
+      // Todo redirection based on role
     },
     onError: (error: ApiError) => {
-      if (isValidationError(error)) console.log(error.errors);
-      else console.log(error.message);
+      // Todo process error
     },
   });
 
