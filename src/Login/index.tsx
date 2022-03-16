@@ -5,7 +5,7 @@ import { loginApi } from "../services/api";
 import { ApiError, LoginRequestDto } from "../services/api/types";
 import ProgressButton, {
   ProgressButtonStatus,
-} from "../shared/components/ProgressButton";
+} from "../common/components/ProgressButton";
 import classes from "./styles.module.scss";
 
 export default function Login() {

@@ -9,14 +9,12 @@ const queryClient = new QueryClient();
 
 export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className={classes.wrapper}>
+    <QueryClientProvider client={queryClient}> 
         <BrowserRouter>
           <Header />
           <AppContent />
           <Footer />
-        </BrowserRouter>
-      </div>
+        </BrowserRouter>    
     </QueryClientProvider>
   );
 }
