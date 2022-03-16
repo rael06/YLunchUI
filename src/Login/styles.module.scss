@@ -2,7 +2,12 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  :nth-child(n) {
-    margin-top: 10px;
-  }
+}
+
+.field {
+  margin-top: 8px;
+}
+
+.button {
+  margin-top: 16px;
 }

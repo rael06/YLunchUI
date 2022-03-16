@@ -5,7 +5,7 @@ import NotFoundPage from "../NotFoundPage";
 import RestaurantApp from "../RestaurantApp";
 import classes from "./styles.module.scss";
 
-export default function App() {
+export default function AppContent() {
   return (
     <div className={classes.wrapper}>
       <Routes>

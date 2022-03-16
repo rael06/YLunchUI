@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter } from "react-router-dom";
 import classes from "./App.module.scss";
-import Content from "./Content";
+import AppContent from "./AppContent";
 import Footer from "./Footer";
 import Header from "./Header";
 
@@ -13,7 +13,7 @@ export default function App() {
       <div className={classes.wrapper}>
         <BrowserRouter>
           <Header />
-          <Content />
+          <AppContent />
           <Footer />
         </BrowserRouter>
       </div>
