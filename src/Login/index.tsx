@@ -1,12 +1,13 @@
 import { TextField } from "@mui/material";
 import React from "react";
 import { useMutation } from "react-query";
-import { loginApi } from "../services/api";
-import { ApiError, LoginRequestDto } from "../services/api/types";
+import { loginApi } from "../services/api/authentication";
+import { ApiError } from "../models/Common";
 import ProgressButton, {
   ProgressButtonStatus,
 } from "../common/components/ProgressButton";
 import classes from "./styles.module.scss";
+import { LoginRequestDto } from "../models/Authentication";
 
 export default function Login() {
   const [email, setEmail] = React.useState("admin@restaurant.com");
