@@ -5,11 +5,17 @@ import logo from "./ylunch-logo.png";
 
 export default function Header() {
   return (
-    <Box sx={{boxShadow: 1}} mb={5} component={"header"} className={classes.wrapper}>
+    <Box
+      sx={{ boxShadow: 1 }}
+      mb={5}
+      component={"header"}
+      className={classes.wrapper}
+    >
       <Link to="/">
         <img src={logo} alt="Logo Ylunch" className={classes.logo} />
       </Link>
-      <Link to="/login">Connexion</Link>
+      <Link to="registration">S'enregistrer</Link>
+      <Link to="login">Connexion</Link>
     </Box>
   );
 }

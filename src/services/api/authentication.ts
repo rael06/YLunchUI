@@ -1,4 +1,5 @@
 import { LoginRequestDto } from "../../models/Authentication";
+import { CustomerCreateDto } from "../../models/Customer";
 import {
   apiUrl,
   assertSuccess,
@@ -18,6 +19,16 @@ export async function loginApi(login: LoginRequestDto): Promise<void> {
   const TokenReadDto = await response.json();
   localStorage.setItem("accessToken", TokenReadDto.accessToken);
   localStorage.setItem("refreshToken", TokenReadDto.refreshToken);
+}
+
+export async function RegisterApi(login: CustomerCreateDto): Promise<void> {
+  const response = await fetch(`${apiUrl}/customers`, {
+    method: restMethods.post,
+    headers: getAnonymousHeaders(),
+    body: JSON.stringify(login),
+  });
+
+  await assertSuccess(response);
 }
 
 export async function getNewTokens(): Promise<void> {

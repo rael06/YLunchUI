@@ -8,7 +8,7 @@ import classes from "./styles.module.scss";
 export default function Restaurants() {
   const [restaurants, setRestaurants] = React.useState<RestaurantReadDto[]>([]);
 
-  const query = useQuery("restaurants", getRestaurants, {
+  useQuery("restaurants", getRestaurants, {
     onSuccess: (response) => {
       setRestaurants(response);
     },
