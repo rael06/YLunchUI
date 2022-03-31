@@ -53,7 +53,8 @@ export default function RegistrationForm() {
           });
         }, progressButtonRecoveryTimeout);
       },
-      onError: (_: ApiError) => {
+      onError: (error: ApiError) => {
+        alert(error.errors.reasons.join("\n"));
         setStatus("error");
         setTimeout(() => {
           setStatus("idling");
