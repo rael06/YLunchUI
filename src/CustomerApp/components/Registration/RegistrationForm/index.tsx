@@ -13,11 +13,11 @@ import {
   passwordRegExp,
   phoneNumberRegExp,
   ynovEmailRegExp,
-} from "../../../../constants/regexps";
-import { progressButtonRecoveryTimeout } from "../../../../constants/timeouts";
-import { ApiError } from "../../../../models/Common";
-import { CustomerCreateDto } from "../../../../models/Customer";
-import { RegisterApi } from "../../../../services/api/authentication";
+} from "../../../../common/constants/regexps";
+import { progressButtonRecoveryTimeout } from "../../../../common/constants/timeouts";
+import { ApiError } from "../../../../common/models/Common";
+import { CustomerCreateDto } from "../../../models/Customer";
+import { addCustomerApi } from "../../../services/api/customers";
 
 interface Inputs extends FieldValues {
   firstname: string;
@@ -38,26 +38,29 @@ export default function RegistrationForm() {
     getValues,
   } = useForm<Inputs>({ mode: "onBlur" });
 
-  const mutation = useMutation((data: CustomerCreateDto) => RegisterApi(data), {
-    onSuccess: () => {
-      setStatus("success");
-      setTimeout(() => {
-        setStatus("idling");
-        navigate("/customer/login", {
-          state: {
-            message:
-              "Votre compte a bien été créé, veuillez-vous authentifier avec votre login/mot de passe",
-          },
-        });
-      }, progressButtonRecoveryTimeout);
-    },
-    onError: (_: ApiError) => {
-      setStatus("error");
-      setTimeout(() => {
-        setStatus("idling");
-      }, progressButtonRecoveryTimeout);
-    },
-  });
+  const mutation = useMutation(
+    (data: CustomerCreateDto) => addCustomerApi(data),
+    {
+      onSuccess: () => {
+        setStatus("success");
+        setTimeout(() => {
+          setStatus("idling");
+          navigate("/customer/login", {
+            state: {
+              message:
+                "Votre compte a bien été créé, veuillez-vous authentifier avec votre login/mot de passe",
+            },
+          });
+        }, progressButtonRecoveryTimeout);
+      },
+      onError: (_: ApiError) => {
+        setStatus("error");
+        setTimeout(() => {
+          setStatus("idling");
+        }, progressButtonRecoveryTimeout);
+      },
+    }
+  );
 
   const submit = (data: CustomerCreateDto) => {
     setStatus("loading");

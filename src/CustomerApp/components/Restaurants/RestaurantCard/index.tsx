@@ -1,4 +1,4 @@
-import { RestaurantReadDto } from "../../../../models/Restaurant";
+import { RestaurantReadDto } from "../../../../common/models/Restaurant";
 import classes from "./styles.module.scss";
 
 type Props = {

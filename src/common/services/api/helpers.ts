@@ -1,8 +1,8 @@
 import subSeconds from "date-fns/subSeconds";
+import { ApiError } from "../../models/Common";
 import { parse } from "../JwtToken";
-import * as localStorage from "../localStorage";
+import { getLocalStorageItem } from "../localStorage";
 import { getNewTokens } from "./authentication";
-import { ApiError, ErrorDto } from "../../models/Common";
 
 // export const apiUrl = "http://localhost:5254";
 export const apiUrl = "https://ylunch-api.rael-calitro.ovh";
@@ -25,25 +25,24 @@ export function getAnonymousHeaders() {
 
 export async function getAuthorizedHeaders() {
   const headers = getAnonymousHeaders();
-  let accessToken = localStorage.getItem("accessToken");
+  let accessToken = getLocalStorageItem("accessToken");
   if (!accessToken) return headers;
 
   const accessTokenData = parse(accessToken);
   if (accessTokenData.exp < subSeconds(new Date(), 30).getTime()) {
     await getNewTokens();
-    accessToken = localStorage.getItem("accessToken");
+    accessToken = getLocalStorageItem("accessToken");
   }
 
   headers.set("Authorization", `Bearer ${accessToken}`);
   return headers;
 }
 
-export async function assertSuccess(response: Response) {
-  if (response.status < 400) {
-    return;
+export async function processResponse<T>(response: Response) {
+  const data = await response.json();
+  if (response.ok) {
+    return data as T;
   }
-  const errorDto = (await response.json()) as ErrorDto;
-  const { title, status, errors } = errorDto;
-  const error = { message: title, title, status, errors } as ApiError;
+  const error = data as ApiError;
   throw error;
 }

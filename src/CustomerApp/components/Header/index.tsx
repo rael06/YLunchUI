@@ -1,9 +1,28 @@
 import { Box } from "@mui/material";
 import { Link } from "react-router-dom";
+import useCurrentUser from "../../../common/hooks/useCurrentUser";
+import LoggedOutSection from "./components/LoggedOutSection";
+import LoggedInSection from "./components/LoggedInSection";
 import classes from "./styles.module.scss";
 import logo from "./ylunch-logo.png";
+import React from "react";
+import { getCurrentUserApi } from "../../../common/services/api/authentication";
+import { getLocalStorageItem } from "../../../common/services/localStorage";
 
 export default function Header() {
+  const { currentUser, setCurrentUser } = useCurrentUser();
+
+  React.useEffect(() => {
+    if (
+      getLocalStorageItem("accessToken") &&
+      getLocalStorageItem("refreshToken")
+    ) {
+      getCurrentUserApi().then((res) => {
+        setCurrentUser(res);
+      });
+    }
+  }, [setCurrentUser]);
+
   return (
     <Box
       sx={{ boxShadow: 1 }}
@@ -14,8 +33,7 @@ export default function Header() {
       <Link to="/">
         <img src={logo} alt="Logo Ylunch" className={classes.logo} />
       </Link>
-      <Link to="registration">S'enregistrer</Link>
-      <Link to="login">Connexion</Link>
+      {currentUser ? <LoggedInSection /> : <LoggedOutSection />}
     </Box>
   );
 }

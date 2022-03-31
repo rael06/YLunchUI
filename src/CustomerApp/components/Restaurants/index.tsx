@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "react-query";
-import { RestaurantReadDto } from "../../../models/Restaurant";
-import { getRestaurants } from "../../../services/api/restaurant";
+import { RestaurantReadDto } from "../../../common/models/Restaurant";
+import { getRestaurants } from "../../services/api/restaurants";
 import Restaurant from "./RestaurantCard";
 import classes from "./styles.module.scss";
 

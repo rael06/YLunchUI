@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import CustomerApp from "../CustomerApp";
-import NotFoundPage from "../NotFoundPage";
+import NotFoundPage from "../common/NotFoundPage";
 import RestaurantApp from "../RestaurantApp";
 
 export default function AppContent() {
