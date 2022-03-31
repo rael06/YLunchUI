@@ -45,7 +45,8 @@ export default function RegistrationForm() {
         setStatus("idling");
         navigate("/customer/login", {
           state: {
-            message: "Un email de confirmation vous a été envoyé",
+            message:
+              "Votre compte a bien été créé, veuillez-vous authentifier avec votre login/mot de passe",
           },
         });
       }, progressButtonRecoveryTimeout);
@@ -81,6 +82,7 @@ export default function RegistrationForm() {
         errors={errors}
         label="Nom*"
         name="lastname"
+        // Todo remove initialValue
         initialValue="lastname"
         rules={{
           required: "Ce champs est requis",
@@ -96,6 +98,7 @@ export default function RegistrationForm() {
         errors={errors}
         label="Prénom*"
         name="firstname"
+        // Todo remove initialValue
         initialValue="firstname"
         rules={{
           required: "Ce champs est requis",
@@ -111,7 +114,8 @@ export default function RegistrationForm() {
         errors={errors}
         label="Téléphone*"
         name="phoneNumber"
-        initialValue="0623015217"
+        // Todo remove initialValue
+        initialValue="0612345678"
         rules={{
           required: "Ce champs est requis",
           pattern: {
@@ -126,12 +130,14 @@ export default function RegistrationForm() {
         errors={errors}
         label="Adresse mail*"
         name="email"
+        // Todo remove initialValue
         initialValue="firstname.lastname@ynov.com"
         rules={{
           required: "Ce champs est requis",
           pattern: {
             value: ynovEmailRegExp,
-            message: "Votre email de respecter le format : prenom.nom@ynov.com",
+            message:
+              "Votre email doit respecter le format : prenom.nom@ynov.com",
           },
         }}
       />
@@ -141,6 +147,7 @@ export default function RegistrationForm() {
         label="Mot de passe*"
         name="password"
         type="password"
+        // Todo remove initialValue
         initialValue={"Password1234."}
         rules={{
           required: "Ce champs est requis",
@@ -157,6 +164,7 @@ export default function RegistrationForm() {
         label="Confirmation du mot de passe*"
         name="passwordConfirm"
         type="password"
+        // Todo remove initialValue
         initialValue={"Password1234."}
         rules={{
           required: "Ce champs est requis",
