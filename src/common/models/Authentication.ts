@@ -3,6 +3,11 @@ export type LoginRequestDto = {
   password: string;
 };
 
+export type RefreshTokensRequestDto = {
+  accessToken: string;
+  refreshToken: string;
+};
+
 export type TokenReadDto = {
   accessToken: string;
   refreshToken: string;

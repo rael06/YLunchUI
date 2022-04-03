@@ -1,4 +1,8 @@
-import { LoginRequestDto, UserReadDto } from "../../models/Authentication";
+import {
+  LoginRequestDto,
+  RefreshTokensRequestDto,
+  UserReadDto,
+} from "../../models/Authentication";
 import {
   getLocalStorageItem,
   removeLocalStorageItem,
@@ -32,14 +36,19 @@ export async function loginApi(login: LoginRequestDto): Promise<void> {
     });
 }
 
-export async function getNewTokens(): Promise<void> {
+export async function refreshTokensApi(): Promise<void> {
   const accessToken = getLocalStorageItem("accessToken");
   const refreshToken = getLocalStorageItem("refreshToken");
+  if (!accessToken || !refreshToken) {
+    return;
+  }
+
+  const body: RefreshTokensRequestDto = { accessToken, refreshToken };
 
   return fetch(`${apiUrl}/authentication/refresh-tokens`, {
     method: restMethods.post,
     headers: getAnonymousHeaders(),
-    body: JSON.stringify({ accessToken, refreshToken }),
+    body: JSON.stringify(body),
   })
     .then(async (response) => await processResponse<TokenReadDto>(response))
     .then((data: TokenReadDto) => {

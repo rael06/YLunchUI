@@ -16,6 +16,7 @@ import {
 } from "../../../../common/constants/regexps";
 import { progressButtonRecoveryTimeout } from "../../../../common/constants/timeouts";
 import { ApiError } from "../../../../common/models/Common";
+import { translateApiErrors } from "../../../../common/services/api/translation";
 import { CustomerCreateDto } from "../../../models/Customer";
 import { addCustomerApi } from "../../../services/api/customers";
 
@@ -31,6 +32,7 @@ interface Inputs extends FieldValues {
 export default function RegistrationForm() {
   const navigate = useNavigate();
   const [status, setStatus] = React.useState<ProgressButtonStatus>("idling");
+  const [apiErrors, setApiErrors] = React.useState<ApiError>();
   const {
     register,
     formState: { errors },
@@ -54,7 +56,8 @@ export default function RegistrationForm() {
         }, progressButtonRecoveryTimeout);
       },
       onError: (error: ApiError) => {
-        alert(error.errors.reasons.join("\n"));
+        setApiErrors(error);
+
         setStatus("error");
         setTimeout(() => {
           setStatus("idling");
@@ -173,13 +176,18 @@ export default function RegistrationForm() {
         rules={{
           required: "Ce champs est requis",
           validate: {
-            match: (value: any) =>
+            match: (value: string) =>
               value === getValues().password ||
               "Les mots doivent être identiques",
           },
         }}
       />
       <ProgressButton type="submit" label="Envoyer" status={status} />
+      {apiErrors && (
+        <Typography color="error">
+          {translateApiErrors(apiErrors, "Utilisateur")}
+        </Typography>
+      )}
     </Box>
   );
 }

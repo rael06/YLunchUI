@@ -2,7 +2,7 @@ import subSeconds from "date-fns/subSeconds";
 import { ApiError } from "../../models/Common";
 import { parse } from "../JwtToken";
 import { getLocalStorageItem } from "../localStorage";
-import { getNewTokens } from "./authentication";
+import { refreshTokensApi } from "./authentication";
 
 // export const apiUrl = "http://localhost:5254";
 export const apiUrl = "https://ylunch-api.rael-calitro.ovh";
@@ -30,7 +30,7 @@ export async function getAuthorizedHeaders() {
 
   const accessTokenData = parse(accessToken);
   if (accessTokenData.exp < subSeconds(new Date(), 30).getTime()) {
-    await getNewTokens();
+    await refreshTokensApi();
     accessToken = getLocalStorageItem("accessToken");
   }
 
@@ -38,10 +38,10 @@ export async function getAuthorizedHeaders() {
   return headers;
 }
 
-export async function processResponse<T>(response: Response) {
+export async function processResponse<TResponseDto>(response: Response) {
   const data = await response.json();
   if (response.ok) {
-    return data as T;
+    return data as TResponseDto;
   }
   const error = data as ApiError;
   throw error;
