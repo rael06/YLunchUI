@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import useCurrentUser from "../../../../../common/hooks/useCurrentUser";
 import { removeLocalStorageItem } from "../../../../../common/services/localStorage";
 
@@ -18,11 +18,11 @@ export default function LoggedInSection() {
   }
 
   return (
-    <div style={{ display: "flex" }}>
-      <span>{email}</span>
-      <Button variant="outlined" onClick={handleLogout}>
-        Déconnexion
-      </Button>
-    </div>
+    <Box display="flex" alignItems="center">
+      <Typography variant="body1" marginRight={1}>
+        {email}
+      </Typography>
+      <Button onClick={handleLogout}>Déconnexion</Button>
+    </Box>
   );
 }

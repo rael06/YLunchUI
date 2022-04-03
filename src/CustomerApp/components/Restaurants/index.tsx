@@ -1,24 +1,25 @@
+import { Box } from "@mui/material";
 import React from "react";
 import { useQuery } from "react-query";
 import { RestaurantReadDto } from "../../../common/models/Restaurant";
-import { getRestaurants } from "../../services/api/restaurants";
-import Restaurant from "./RestaurantCard";
+import { getRestaurantsApi } from "../../services/api/restaurants";
+import RestaurantCard from "./RestaurantCard";
 import classes from "./styles.module.scss";
 
 export default function Restaurants() {
   const [restaurants, setRestaurants] = React.useState<RestaurantReadDto[]>([]);
 
-  useQuery("restaurants", getRestaurants, {
+  useQuery("restaurants", getRestaurantsApi, {
     onSuccess: (response) => {
       setRestaurants(response);
     },
   });
 
   return (
-    <div className={classes.wrapper}>
+    <Box className={classes.wrapper}>
       {restaurants.map((restaurant) => (
-        <Restaurant key={restaurant.id} restaurant={restaurant} />
+        <RestaurantCard key={restaurant.id} restaurant={restaurant} />
       ))}
-    </div>
+    </Box>
   );
 }

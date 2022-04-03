@@ -9,7 +9,10 @@ import ProgressButton, {
   ProgressButtonStatus,
 } from "../../../../common/components/ProgressButton";
 import { ynovEmailRegExp } from "../../../../common/constants/regexps";
-import { progressButtonRecoveryTimeout } from "../../../../common/constants/timeouts";
+import {
+  progressButtonErrorRecoveryTimeout,
+  progressButtonSuccessRecoveryTimeout,
+} from "../../../../common/constants/timeouts";
 import useCurrentUser from "../../../../common/hooks/useCurrentUser";
 import { LoginRequestDto } from "../../../../common/models/Authentication";
 import { ApiError } from "../../../../common/models/Common";
@@ -39,15 +42,15 @@ export default function LoginForm() {
       setStatus("success");
       setTimeout(async () => {
         setStatus("idling");
-        navigate("/customer/");
-      }, progressButtonRecoveryTimeout);
+        navigate("/customer/restaurants");
+      }, progressButtonSuccessRecoveryTimeout);
     },
     onError: (_: ApiError) => {
       setCurrentUser(undefined);
       setStatus("error");
       setTimeout(() => {
         setStatus("idling");
-      }, progressButtonRecoveryTimeout);
+      }, progressButtonErrorRecoveryTimeout);
     },
   });
 

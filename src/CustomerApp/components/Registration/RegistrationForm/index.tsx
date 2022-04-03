@@ -14,7 +14,10 @@ import {
   phoneNumberRegExp,
   ynovEmailRegExp,
 } from "../../../../common/constants/regexps";
-import { progressButtonRecoveryTimeout } from "../../../../common/constants/timeouts";
+import {
+  progressButtonErrorRecoveryTimeout,
+  progressButtonSuccessRecoveryTimeout,
+} from "../../../../common/constants/timeouts";
 import { ApiError } from "../../../../common/models/Common";
 import { translateApiErrors } from "../../../../common/services/api/translation";
 import { CustomerCreateDto } from "../../../models/Customer";
@@ -53,7 +56,7 @@ export default function RegistrationForm() {
                 "Votre compte a bien été créé, veuillez-vous authentifier avec votre login/mot de passe",
             },
           });
-        }, progressButtonRecoveryTimeout);
+        }, progressButtonSuccessRecoveryTimeout);
       },
       onError: (error: ApiError) => {
         setApiErrors(error);
@@ -61,7 +64,7 @@ export default function RegistrationForm() {
         setStatus("error");
         setTimeout(() => {
           setStatus("idling");
-        }, progressButtonRecoveryTimeout);
+        }, progressButtonErrorRecoveryTimeout);
       },
     }
   );

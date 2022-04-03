@@ -12,7 +12,7 @@ export default function AppContent() {
           path="/restaurant-administration/*"
           element={<RestaurantApp />}
         />
-        <Route path="/" element={<Navigate to="/customer" />} />
+        <Route path="/" element={<Navigate to="/customer/restaurants" />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>

@@ -26,7 +26,7 @@ export default function Header() {
   return (
     <Box
       sx={{ boxShadow: 1 }}
-      mb={5}
+      paddingX={2}
       component={"header"}
       className={classes.wrapper}
     >

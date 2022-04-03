@@ -3,12 +3,10 @@
   flex-direction: column;
   width: 100vw;
   min-height: 100vh;
-
-  > * {
-    padding: 0 1rem;
-  }
 }
 
 .body {
+  display: flex;
+  flex-direction: column;
   flex: 1;
 }
