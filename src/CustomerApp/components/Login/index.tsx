@@ -3,8 +3,8 @@ import LoginForm from "./LoginForm";
 
 export default function Login() {
   return (
-    <>
-      <Typography gutterBottom variant="h2" component="h1">
+    <Container maxWidth="lg">
+      <Typography mb={2} variant="h2" component="h1">
         Connexion
       </Typography>
       <Card>
@@ -14,6 +14,6 @@ export default function Login() {
           </CardContent>
         </Container>
       </Card>
-    </>
+    </Container>
   );
 }

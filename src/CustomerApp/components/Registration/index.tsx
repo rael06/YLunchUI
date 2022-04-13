@@ -1,10 +1,10 @@
-import { Typography, Card, CardContent, Container } from "@mui/material";
+import { Card, CardContent, Container, Typography } from "@mui/material";
 import RegistrationForm from "./RegistrationForm";
 
 export default function Registration() {
   return (
-    <>
-      <Typography gutterBottom variant="h2" component="h1">
+    <Container maxWidth="lg">
+      <Typography mb={2} variant="h2" component="h1">
         Inscription
       </Typography>
       <Card>
@@ -14,6 +14,6 @@ export default function Registration() {
           </CardContent>
         </Container>
       </Card>
-    </>
+    </Container>
   );
 }

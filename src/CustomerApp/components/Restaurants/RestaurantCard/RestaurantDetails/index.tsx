@@ -28,7 +28,7 @@ export default function RestaurantDetails() {
   }
 
   return (
-    <Box display="flex" flexDirection="column" paddingX={2}>
+    <Box display="flex" flexDirection="column">
       <GoBackButton />
       <Typography variant="body1">{restaurant?.name}</Typography>
       <Products restaurantId={restaurantId} />
