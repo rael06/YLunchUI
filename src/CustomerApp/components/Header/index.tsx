@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import useCurrentUser from "../../../common/hooks/useCurrentUser";
 import LoggedOutSection from "./components/LoggedOutSection";
 import LoggedInSection from "./components/LoggedInSection";
-import classes from "./styles.module.scss";
 import logo from "./ylunch-logo.png";
 import React from "react";
 import { getCurrentUserApi } from "../../../common/services/api/authentication";
@@ -25,13 +24,22 @@ export default function Header() {
 
   return (
     <Box
-      sx={{ boxShadow: 1 }}
+      sx={{
+        boxShadow: 1,
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}
       paddingX={2}
       component={"header"}
-      className={classes.wrapper}
     >
       <Link to="/">
-        <img src={logo} alt="Logo Ylunch" className={classes.logo} />
+        <Box
+          component={"img"}
+          sx={{ height: "50px" }}
+          src={logo}
+          alt="Logo Ylunch"
+        />
       </Link>
       {currentUser ? <LoggedInSection /> : <LoggedOutSection />}
     </Box>

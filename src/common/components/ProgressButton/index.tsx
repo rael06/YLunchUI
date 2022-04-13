@@ -1,5 +1,5 @@
 import { CheckCircle, Error } from "@mui/icons-material";
-import { Button, CircularProgress } from "@mui/material";
+import { Button, CircularProgress, Box } from "@mui/material";
 import classes from "./styles.module.scss";
 
 export type ProgressButtonStatus = "idling" | "loading" | "success" | "error";
@@ -27,7 +27,14 @@ export default function ProgressButton({
   type = "button",
 }: Props) {
   return (
-    <div className={classes.wrapper}>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        marginRight: "auto",
+      }}
+    >
       <Button
         type={type}
         onClick={onClick}
@@ -65,6 +72,6 @@ export default function ProgressButton({
           }}
         />
       )}
-    </div>
+    </Box>
   );
 }

@@ -2,13 +2,12 @@ import { Launch } from "@mui/icons-material";
 import { Button, Grid } from "@mui/material";
 import { Box } from "@mui/system";
 import { useNavigate } from "react-router-dom";
-import classes from "./styles.module.scss";
 
 export default function Footer() {
   const navigate = useNavigate();
 
   return (
-    <Box component="footer" paddingX={2} className={classes.wrapper}>
+    <Box component="footer" paddingX={2}>
       <Grid
         container
         direction="row"
@@ -18,15 +17,19 @@ export default function Footer() {
         <Button onClick={() => navigate("/legal")}>Mentions légales</Button>
         <Button onClick={() => navigate("/sitemap")}>Plan du site</Button>
         <Button>
-          <a
-            className={classes.link}
+          <Box
+            component={"a"}
+            sx={{
+              textDecoration: "none",
+              color: "inherit",
+            }}
             href="https://github.com/YLunch/YLunchUI"
             target="_blank"
             rel="noreferrer"
           >
             ©Ylunch 2021-2022
             <Launch fontSize="inherit" />
-          </a>
+          </Box>
         </Button>
       </Grid>
     </Box>
