@@ -1,5 +1,6 @@
 import { Box, Button, Typography } from "@mui/material";
 import useCurrentUser from "../../../../../common/hooks/useCurrentUser";
+import { logoutApi } from "../../../../../common/services/api/authentication";
 import { removeLocalStorageItem } from "../../../../../common/services/localStorage";
 
 export default function LoggedInSection() {
@@ -11,7 +12,8 @@ export default function LoggedInSection() {
 
   const { email } = currentUser;
 
-  function handleLogout() {
+  async function handleLogout() {
+    await logoutApi();
     removeLocalStorageItem("accessToken");
     removeLocalStorageItem("refreshToken");
     setCurrentUser(undefined);

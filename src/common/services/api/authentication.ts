@@ -68,3 +68,10 @@ export async function getCurrentUserApi(): Promise<UserReadDto> {
     headers: await getAuthorizedHeaders(),
   }).then(async (response) => await processResponse(response));
 }
+
+export async function logoutApi(): Promise<void> {
+  return fetch(`${apiUrl}/authentication/logout`, {
+    method: restMethods.get,
+    headers: await getAuthorizedHeaders(),
+  }).then(async (response) => await processResponse(response));
+}
