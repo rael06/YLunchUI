@@ -1,7 +1,7 @@
+import { Box, Typography } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import { ProductReadDto } from "../../../../models/Product";
 import ProductCard from "./ProductCard";
-import Grid from "@mui/material/Grid";
-import { Box, Typography } from "@mui/material";
 
 type Props = {
   title: string;
@@ -11,8 +11,8 @@ type Props = {
 export default function ProductsByType({ title, products }: Props) {
   return (
     <>
-      <Box sx={{ p: 2, backgroundColor: "blue" }}>
-        <Typography variant="h5" component="h2">
+      <Box sx={{ p: 2, backgroundColor: "#FF914D" }}>
+        <Typography variant="h4" component="h2" sx={{color: 'white'}}>
           {title}
         </Typography>
       </Box>
