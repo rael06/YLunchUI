@@ -18,7 +18,9 @@ export default function Cart() {
 
   async function confirmOrder() {
     return await addOrderApi(cart.restaurantId, {
-      productIds: cart.items.map((item) => item.product.id),
+      productIds: cart.items
+        .map((item) => Array(item.quantity).fill(item.product.id))
+        .flat(),
       customerComment: "",
       reservedForDateTime: addHours(new Date(), 1),
     });
