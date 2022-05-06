@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  color: white;
 }
 
 .wrapper > * {
@@ -9,9 +10,10 @@
 }
 
 .wrapper > :nth-child(2n + 0) {
-  background-color: lightyellow;
+  background:linear-gradient(to left,rgba(255, 145, 77, 1),rgba(255, 145, 77, 0)),url(../../../../public/takeaway.png) center center/ cover;
+  
 }
 
 .wrapper > :nth-child(2n + 1) {
-  background-color: lightcyan;
+  background:linear-gradient(to right,rgba(3, 152, 158, 1),rgba(3, 152, 158, 0)),url(../../../../public/sandwich.png) center center/ cover;
 }

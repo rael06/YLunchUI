@@ -15,6 +15,8 @@ export default function Restaurants() {
     },
   });
 
+
+
   return (
     <Box className={classes.wrapper}>
       {restaurants.map((restaurant) => (

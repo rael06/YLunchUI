@@ -25,8 +25,8 @@ export type OpeningTimeReadDto = {
   id: string;
   restaurantId: string;
   dayOfWeek: DayOfWeek;
-  OffsetInMinutes: number;
-  DurationInMinutes: number;
+  offsetInMinutes: number;
+  durationInMinutes: number;
 };
 
 export type ClosingDateReadDto = {
