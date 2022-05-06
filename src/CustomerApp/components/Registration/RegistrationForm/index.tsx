@@ -5,19 +5,14 @@ import { FieldValues, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import FormInput from "../../../../common/components/FormInput";
-import ProgressButton, {
-  ProgressButtonStatus,
-} from "../../../../common/components/ProgressButton";
+import ProgressButton from "../../../../common/components/ProgressButton";
 import {
   firstOrLastNameRegExp,
   passwordRegExp,
   phoneNumberRegExp,
   ynovEmailRegExp,
 } from "../../../../common/constants/regexps";
-import {
-  progressButtonErrorRecoveryTimeout,
-  progressButtonSuccessRecoveryTimeout,
-} from "../../../../common/constants/timeouts";
+import useAsyncAction from "../../../../common/hooks/useAsyncAction";
 import { ApiError } from "../../../../common/models/Common";
 import { translateApiErrors } from "../../../../common/services/api/translation";
 import { CustomerCreateDto } from "../../../models/Customer";
@@ -34,8 +29,8 @@ interface Inputs extends FieldValues {
 
 export default function RegistrationForm() {
   const navigate = useNavigate();
-  const [status, setStatus] = React.useState<ProgressButtonStatus>("idling");
   const [apiErrors, setApiErrors] = React.useState<ApiError>();
+  const { actAsync, status } = useAsyncAction();
   const {
     register,
     formState: { errors },
@@ -46,33 +41,24 @@ export default function RegistrationForm() {
   const mutation = useMutation(
     (data: CustomerCreateDto) => addCustomerApi(data),
     {
-      onSuccess: () => {
-        setStatus("success");
-        setTimeout(() => {
-          setStatus("idling");
-          navigate("/customer/login", {
-            state: {
-              message:
-                "Votre compte a bien été créé, veuillez-vous authentifier avec votre login/mot de passe",
-            },
-          });
-        }, progressButtonSuccessRecoveryTimeout);
-      },
       onError: (error: ApiError) => {
         setApiErrors(error);
-
-        setStatus("error");
-        setTimeout(() => {
-          setStatus("idling");
-        }, progressButtonErrorRecoveryTimeout);
       },
     }
   );
 
-  const submit = (data: CustomerCreateDto) => {
-    setStatus("loading");
-    mutation.mutate(data);
-  };
+  async function submit(data: CustomerCreateDto) {
+    await actAsync({
+      asyncAction: async () => await mutation.mutateAsync(data),
+      onSuccessTimeoutAsync: async () =>
+        navigate("/customer/login", {
+          state: {
+            message:
+              "Votre compte a bien été créé, veuillez-vous authentifier avec votre login/mot de passe",
+          },
+        }),
+    });
+  }
 
   return (
     <Box

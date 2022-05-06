@@ -1,6 +1,5 @@
 import { CheckCircle, Error } from "@mui/icons-material";
-import { Button, CircularProgress, Box } from "@mui/material";
-import classes from "./styles.module.scss";
+import { Box, Button, CircularProgress } from "@mui/material";
 
 export type ProgressButtonStatus = "idling" | "loading" | "success" | "error";
 type Props = {
@@ -8,6 +7,7 @@ type Props = {
   onClick?: () => void;
   status: ProgressButtonStatus;
   type?: "submit" | "button";
+  variant?: "outlined" | "text" | "contained";
 };
 
 const colors: Record<
@@ -25,6 +25,7 @@ export default function ProgressButton({
   onClick,
   status,
   type = "button",
+  variant = "outlined",
 }: Props) {
   return (
     <Box
@@ -39,7 +40,7 @@ export default function ProgressButton({
         type={type}
         onClick={onClick}
         disabled={status === "loading"}
-        variant="outlined"
+        variant={variant}
         color={colors[status]}
       >
         <span

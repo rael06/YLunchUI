@@ -1,4 +1,4 @@
-import subSeconds from "date-fns/subSeconds";
+import { subMinutes } from "date-fns";
 import { ApiError } from "../../models/Common";
 import { parse } from "../JwtToken";
 import { getLocalStorageItem } from "../localStorage";
@@ -29,7 +29,7 @@ export async function getAuthorizedHeaders() {
   if (!accessToken) return headers;
 
   const accessTokenData = parse(accessToken);
-  if (accessTokenData.exp < subSeconds(new Date(), 30).getTime()) {
+  if (accessTokenData.exp * 1000 < subMinutes(new Date(), 1).getTime()) {
     await refreshTokensApi();
     accessToken = getLocalStorageItem("accessToken");
   }
@@ -39,10 +39,14 @@ export async function getAuthorizedHeaders() {
 }
 
 export async function processResponse<TResponseDto>(response: Response) {
-  const data = await response.json();
-  if (response.ok) {
-    return data as TResponseDto;
+  if (response.status < 400) {
+    try {
+      const data = await response.json();
+      return data as TResponseDto;
+    } catch {
+      return {} as TResponseDto;
+    }
   }
-  const error = data as ApiError;
+  const error = (await response.json()) as ApiError;
   throw error;
 }

@@ -43,12 +43,12 @@ export default function Header() {
         />
       </Link>
 
-      <Box marginRight={1}>
-        <Button sx={{ marginRight: "5px" }} onClick={() => navigate("cart")}>
+      <Box sx={{ display: "flex" }}>
+        <Button sx={{ marginRight: 1 }} onClick={() => navigate("cart")}>
           Panier
         </Button>
+        {currentUser ? <LoggedInSection /> : <LoggedOutSection />}
       </Box>
-      {currentUser ? <LoggedInSection /> : <LoggedOutSection />}
     </Box>
   );
 }

@@ -16,3 +16,10 @@ export async function addOrderApi(
     body: JSON.stringify(order),
   }).then(async (response) => await processResponse(response));
 }
+
+export async function getOrdersApi(): Promise<OrderReadDto[]> {
+  return fetch(`${apiUrl}/orders`, {
+    method: restMethods.get,
+    headers: await getAuthorizedHeaders(),
+  }).then(async (response) => await processResponse(response));
+}

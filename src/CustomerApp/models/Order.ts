@@ -9,14 +9,14 @@ export enum OrderState {
   Rejected,
 }
 
-export type OrderStatus = {
+export type OrderStatusReadDto = {
   id: string;
   orderId: string;
   orderState: OrderState;
   dateTime: Date;
 };
 
-export type OrderedProduct = {
+export type OrderedProductReadDto = {
   id: string;
   productId: string;
   restaurantId: string;
@@ -46,9 +46,9 @@ export type OrderReadDto = {
   isAcknowledged: true;
   isAccepted: true;
   isDeleted: true;
-  CurrentOrderStatus: OrderStatus;
-  OrderStatuses: OrderStatus[];
-  OrderedProducts: OrderedProduct[];
+  currentOrderStatus: OrderStatusReadDto;
+  orderStatuses: OrderStatusReadDto[];
+  orderedProducts: OrderedProductReadDto[];
 };
 
 export type OrderCreateDto = {

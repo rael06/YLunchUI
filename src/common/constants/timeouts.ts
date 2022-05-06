@@ -1,2 +1,2 @@
-export const progressButtonSuccessRecoveryTimeout = 1000;
-export const progressButtonErrorRecoveryTimeout = 3000;
+export const defaultSuccessRecoveryTimeout = 1000;
+export const defaultErrorRecoveryTimeout = 3000;
