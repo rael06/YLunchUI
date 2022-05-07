@@ -15,7 +15,7 @@ import {
   getCurrentUserApi,
   loginApi,
 } from "../../../../common/services/api/authentication";
-import { translateApiErrors } from "../../../../common/services/api/translation";
+import { translateApiErrors } from "../../../../common/services/translations/apiErrors";
 
 interface Inputs extends FieldValues {
   email: string;

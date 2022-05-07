@@ -14,7 +14,7 @@ import {
 } from "../../../../common/constants/regexps";
 import useAsyncAction from "../../../../common/hooks/useAsyncAction";
 import { ApiError } from "../../../../common/models/Common";
-import { translateApiErrors } from "../../../../common/services/api/translation";
+import { translateApiErrors } from "../../../../common/services/translations/apiErrors";
 import { CustomerCreateDto } from "../../../models/Customer";
 import { addCustomerApi } from "../../../services/api/customers";
 
