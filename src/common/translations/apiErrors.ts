@@ -1,4 +1,4 @@
-import { ApiError } from "../../models/Common";
+import { ApiError } from "../models/Common";
 
 function translatedApiErrors(
   entityDescription: string

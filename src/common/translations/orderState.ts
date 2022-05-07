@@ -1,4 +1,4 @@
-import { OrderState } from "../../../CustomerApp/models/Order";
+import { OrderState } from "../../CustomerApp/models/Order";
 
 const translatedOrderStates: Record<OrderState, string> = {
   0: "En attente de validation",

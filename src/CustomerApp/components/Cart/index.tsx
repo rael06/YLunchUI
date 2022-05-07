@@ -22,7 +22,7 @@ export default function Cart() {
         .map((item) => Array(item.quantity).fill(item.product.id))
         .flat(),
       customerComment: "",
-      reservedForDateTime: addHours(new Date(), 1),
+      reservedForDateTime: new Date("2022-05-09T11:55:50.857Z"),
     });
   }
 

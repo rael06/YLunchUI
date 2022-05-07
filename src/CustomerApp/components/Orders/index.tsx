@@ -8,11 +8,11 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { format, utcToZonedTime, toDate } from "date-fns-tz";
 import React from "react";
 import { useQuery } from "react-query";
 import { GoBackButton } from "../../../common/components/GoBackButton";
-import { translateOrderState } from "../../../common/services/translations/orderState";
+import { convertUtcToZonedDateTime } from "../../../common/helpers/dates";
+import { translateOrderState } from "../../../common/translations/orderState";
 import { OrderReadDto } from "../../models/Order";
 import { getOrdersApi } from "../../services/api/orders";
 
@@ -35,12 +35,25 @@ export default function Orders() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>N° Réservation</TableCell>
-              <TableCell align="right">Créée le</TableCell>
-              <TableCell align="right">Réservée pour le</TableCell>
-              <TableCell align="right">Prix total</TableCell>
-              <TableCell align="right">Dernier changement d'état le</TableCell>
-              <TableCell align="right">État</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>N° Réservation</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }} align="right">
+                Date
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold" }} align="right">
+                Créée à
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold" }} align="right">
+                Réservée pour
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold" }} align="right">
+                Prix total
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold" }} align="right">
+                Changement d'état à
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold" }} align="right">
+                État
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -54,23 +67,21 @@ export default function Orders() {
                     {order.id}
                   </TableCell>
                   <TableCell align="right">
-                    {format(
-                      utcToZonedTime(
-                        toDate(order.creationDateTime.toString()),
-                        "Europe/Paris"
-                      ),
-                      "dd/MM/yyyy HH:mm:ss zzz",
-                      { timeZone: "Europe/Paris" }
-                    )}
+                    {convertUtcToZonedDateTime(order.creationDateTime)}
                   </TableCell>
                   <TableCell align="right">
-                    {order.reservedForDateTime}
+                    {convertUtcToZonedDateTime(order.creationDateTime)}
+                  </TableCell>
+                  <TableCell align="right">
+                    {convertUtcToZonedDateTime(order.reservedForDateTime)}
                   </TableCell>
                   <TableCell align="right">
                     {order.totalPrice.toFixed(2)} €
                   </TableCell>
                   <TableCell align="right">
-                    {order.currentOrderStatus.dateTime}
+                    {convertUtcToZonedDateTime(
+                      order.currentOrderStatus.dateTime
+                    )}
                   </TableCell>
                   <TableCell align="right">
                     {translateOrderState(order.currentOrderStatus.orderState)}
