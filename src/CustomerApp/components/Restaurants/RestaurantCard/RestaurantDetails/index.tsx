@@ -6,6 +6,7 @@ import { GoBackButton } from "../../../../../common/components/GoBackButton";
 import { RestaurantReadDto } from "../../../../../common/models/Restaurant";
 import { getRestaurantByIdApi } from "../../../../services/api/restaurants";
 import Products from "../../../Products";
+import RestaurantHeader from "../RestaurantHeader";
 
 export default function RestaurantDetails() {
   const urlParams = useParams();
@@ -30,7 +31,7 @@ export default function RestaurantDetails() {
   return (
     <Box display="flex" flexDirection="column">
       <GoBackButton />
-      <Typography variant="body1">{restaurant?.name}</Typography>
+      <RestaurantHeader restaurant={restaurant} />
       <Products restaurantId={restaurantId} />
     </Box>
   );

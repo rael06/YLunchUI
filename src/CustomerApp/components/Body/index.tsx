@@ -9,7 +9,7 @@ import Orders from "../Orders";
 
 export default function Body() {
   return (
-    <Box sx={{ display: "flex", flexDirection: "column" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", flex: 1 }}>
       <Routes>
         <Route path="login" element={<Login />} />
         <Route path="orders" element={<Orders />} />
