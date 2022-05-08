@@ -31,8 +31,11 @@ export default function Header() {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
+        position: "fixed",
+        background: "white",
+        width: "100%",
+        zIndex: 1,
       }}
-      paddingX={2}
       component={"header"}
     >
       <Box sx={{ display: "flex", alignItems: "center" }}>

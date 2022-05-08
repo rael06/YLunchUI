@@ -9,7 +9,14 @@ import RestaurantDetails from "../Restaurants/RestaurantCard/RestaurantDetails";
 
 export default function Body() {
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", flex: 1 }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        flex: 1,
+        marginTop: "60px",
+      }}
+    >
       <Routes>
         <Route path="login" element={<Login />} />
         <Route path="orders" element={<Orders />} />

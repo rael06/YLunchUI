@@ -48,7 +48,7 @@ export default function Cart() {
             ).toISOString(),
           }),
         onSuccessAsync: async () => setIsOrderSucceed(true),
-        // onSuccessTimeoutAsync: async () => clear(),
+        onSuccessTimeoutAsync: async () => clear(),
       });
     }
   }
