@@ -6,26 +6,15 @@ import {
 } from "../../common/services/localStorage";
 import { ProductReadDto } from "../../models/Product";
 import { getProductsApi } from "../services/api/products";
+import { Cart, CartContext, initialCart } from "./../contexts/CartContext";
 
-export type CartItem = {
-  product: ProductReadDto;
-  quantity: number;
-};
-
-type Cart = {
-  restaurantId: string;
-  items: CartItem[];
-};
-
-const initialCart: Cart = { restaurantId: "", items: [] };
-
-function getCartFromLocalStorage(): Cart {
+export function getCartFromLocalStorage(): Cart {
   const cart = getLocalStorageItem("cart");
   return cart ? JSON.parse(cart) : initialCart;
 }
 
 function useCart() {
-  const [cart, setCart] = React.useState<Cart>(() => getCartFromLocalStorage());
+  const { cart, setCart } = React.useContext(CartContext);
   const mutation = useMutation(
     "cart",
     () => {

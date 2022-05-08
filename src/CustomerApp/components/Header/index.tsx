@@ -5,12 +5,14 @@ import { GoBackButton } from "../../../common/components/GoBackButton";
 import useCurrentUser from "../../../common/hooks/useCurrentUser";
 import { getCurrentUserApi } from "../../../common/services/api/authentication";
 import { getLocalStorageItem } from "../../../common/services/localStorage";
+import { CartContext } from "../../contexts/CartContext";
 import LoggedInSection from "./components/LoggedInSection";
 import LoggedOutSection from "./components/LoggedOutSection";
 import logo from "./ylunch-logo.png";
 
 export default function Header() {
   const { currentUser, setCurrentUser } = useCurrentUser();
+  const { cart } = React.useContext(CartContext);
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -55,7 +57,8 @@ export default function Header() {
           Restaurants
         </Button>
         <Button sx={{ marginRight: 1 }} onClick={() => navigate("cart")}>
-          Panier
+          Panier{" "}
+          {cart.items.reduce((acc, cartItem) => acc + cartItem.quantity, 0)}
         </Button>
         {currentUser ? <LoggedInSection /> : <LoggedOutSection />}
       </Box>

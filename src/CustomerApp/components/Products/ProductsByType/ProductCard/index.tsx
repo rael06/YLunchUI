@@ -1,3 +1,4 @@
+import { Remove } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -65,14 +66,18 @@ export default function ProductCard({ product }: Props) {
             <Typography variant="body2" sx={{ fontWeight: "bold" }}>
               Compositions:{" "}
             </Typography>
-            <Typography variant="body2">{description}</Typography>
+            <Typography variant="body2">{description ?? <Remove />}</Typography>
           </Box>
           <Box component="div" sx={{ fontWeight: "bold" }}>
             <Typography variant="body2" sx={{ fontWeight: "bold" }}>
               Allergènes:{" "}
             </Typography>
             <Typography variant="body2" sx={{ display: "flex" }}>
-              {allergens.map((allergen) => allergen.name).join(", ")}
+              {allergens.length > 0 ? (
+                allergens.map((allergen) => allergen.name).join(", ")
+              ) : (
+                <Remove />
+              )}
             </Typography>
           </Box>
         </Box>
