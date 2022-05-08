@@ -39,19 +39,19 @@ export default function Orders() {
           <TableHead>
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>N° Réservation</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }} align="right">
+              <TableCell sx={{ fontWeight: "bold" }} align="center">
                 Date
               </TableCell>
-              <TableCell sx={{ fontWeight: "bold" }} align="right">
+              <TableCell sx={{ fontWeight: "bold" }} align="center">
                 Créée à
               </TableCell>
-              <TableCell sx={{ fontWeight: "bold" }} align="right">
+              <TableCell sx={{ fontWeight: "bold" }} align="center">
                 Réservée pour
               </TableCell>
-              <TableCell sx={{ fontWeight: "bold" }} align="right">
+              <TableCell sx={{ fontWeight: "bold" }} align="center">
                 Prix total
               </TableCell>
-              <TableCell sx={{ fontWeight: "bold" }} align="right">
+              <TableCell sx={{ fontWeight: "bold" }} align="center">
                 État
               </TableCell>
             </TableRow>
@@ -66,19 +66,19 @@ export default function Orders() {
                   <TableCell component="th" scope="row">
                     {order.id}
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell align="center">
                     {convertUtcToZonedDate(order.creationDateTime)}
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell align="center">
                     {convertUtcToZonedTime(order.creationDateTime)}
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell align="center">
                     {convertUtcToZonedTime(order.reservedForDateTime)}
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell align="center">
                     {order.totalPrice.toFixed(2)} €
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell align="center">
                     {translateOrderState(order.currentOrderStatus.orderState)}
                   </TableCell>
                 </TableRow>
