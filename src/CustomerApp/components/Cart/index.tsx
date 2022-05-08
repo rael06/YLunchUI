@@ -1,4 +1,10 @@
-import { Button, Typography } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardContent,
+  Container,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import { toDate } from "date-fns-tz";
 import React from "react";
@@ -54,74 +60,88 @@ export default function Cart() {
   }
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column" }}>
-      {cart.items.map((cartItem) => (
-        <CartItem
-          key={cartItem.product.id}
-          product={cartItem.product}
-          quantity={cartItem.quantity}
-          addProduct={addProduct}
-          removeProduct={removeProduct}
-        />
-      ))}
-      {!!totalPrice && (
-        <Typography>{`${totalPrice.toFixed(2)}`.padStart(2, "0")}</Typography>
-      )}
-      <Button
-        sx={{ marginTop: "10px" }}
-        variant="outlined"
-        onClick={() => clear()}
-        disabled={isCartEmpty}
-      >
-        Supprimer le panier
-      </Button>
-      <ProgressButton
-        label="Confirmer la réservation"
-        sx={{ marginTop: "10px" }}
-        onClick={confirmOrder}
-        disabled={isCartEmpty || isNotLoggedInWhenConfirmOrder}
-        status={status}
-      />
-      {isNotLoggedInWhenConfirmOrder && (
-        <Typography>
-          Veuillez vous{" "}
-          <span
-            onClick={() => navigate("/customer/login")}
-            style={{ cursor: "pointer", color: "#1976d2" }}
-          >
-            connecter
-          </span>{" "}
-          pour enregistrer votre réservation.
-        </Typography>
-      )}
-      {currentUser && isOrderSucceed && (
-        <Typography>
-          Votre réservation a bien été enregistrée, elle est en attente
-          d'acceptation par le restaurant. Vous pouvez consulter son avancée
-          dans la section{" "}
-          <span
-            onClick={() => navigate("/customer/orders")}
-            style={{ cursor: "pointer", color: "#1976d2" }}
-          >
-            Mes réservations
-          </span>
-          .
-        </Typography>
-      )}
-      {addOrderApiError &&
-        addOrderApiError.status === 400 &&
-        (addOrderApiError.errors.reasons.includes(
-          "ReservedForDateTime must be set when the restaurant is open for orders."
-        ) ? (
-          <Typography color="error">
-            L'horaire de retrait doit être compris dans les horaires d'ouverture
-            à la commande du restaurant
-          </Typography>
-        ) : (
-          <Typography color="error">
-            {translateApiErrors(addOrderApiError, "Réservation")}
-          </Typography>
-        ))}
-    </Box>
+    <Card>
+      <Container maxWidth="md">
+        <CardContent>
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
+            {cart.items.length > 0 ? (
+              cart.items.map((cartItem) => (
+                <CartItem
+                  key={cartItem.product.id}
+                  product={cartItem.product}
+                  quantity={cartItem.quantity}
+                  addProduct={addProduct}
+                  removeProduct={removeProduct}
+                />
+              ))
+            ) : (
+              <Typography> Panier vide</Typography>
+            )}
+            {!!totalPrice && (
+              <Typography>
+                {`${totalPrice.toFixed(2)}`.padStart(2, "0")} €
+              </Typography>
+            )}
+            <Box sx={{ display: "flex" }}>
+              <ProgressButton
+                label="Confirmer la réservation"
+                sx={{ marginTop: "10px" }}
+                onClick={confirmOrder}
+                disabled={isCartEmpty || isNotLoggedInWhenConfirmOrder}
+                status={status}
+              />
+              <Button
+                sx={{ marginTop: "10px" }}
+                variant="outlined"
+                onClick={() => clear()}
+                disabled={isCartEmpty}
+              >
+                Supprimer le panier
+              </Button>
+            </Box>
+            {isNotLoggedInWhenConfirmOrder && (
+              <Typography color="error">
+                Veuillez vous{" "}
+                <span
+                  onClick={() => navigate("/customer/login")}
+                  style={{ cursor: "pointer", color: "#1976d2" }}
+                >
+                  connecter
+                </span>{" "}
+                pour enregistrer votre réservation.
+              </Typography>
+            )}
+            {currentUser && isOrderSucceed && (
+              <Typography>
+                Votre réservation a bien été enregistrée, elle est en attente
+                d'acceptation par le restaurant. Vous pouvez consulter son
+                avancée dans la section{" "}
+                <span
+                  onClick={() => navigate("/customer/orders")}
+                  style={{ cursor: "pointer", color: "#1976d2" }}
+                >
+                  Mes réservations
+                </span>
+                .
+              </Typography>
+            )}
+            {addOrderApiError &&
+              addOrderApiError.status === 400 &&
+              (addOrderApiError.errors.reasons.includes(
+                "ReservedForDateTime must be set when the restaurant is open for orders."
+              ) ? (
+                <Typography color="error">
+                  L'horaire de retrait doit être compris dans les horaires
+                  d'ouverture à la commande du restaurant
+                </Typography>
+              ) : (
+                <Typography color="error">
+                  {translateApiErrors(addOrderApiError, "Réservation")}
+                </Typography>
+              ))}
+          </Box>
+        </CardContent>
+      </Container>
+    </Card>
   );
 }

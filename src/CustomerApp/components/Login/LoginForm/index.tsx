@@ -106,12 +106,15 @@ export default function LoginForm() {
           required: "Ce champs est requis",
         }}
       />
-      <ProgressButton
-        type="submit"
-        label="Se connecter"
-        status={status}
-        sx={{ marginTop: 3 }}
-      />
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <ProgressButton type="submit" label="Se connecter" status={status} />
+        <Button
+          onClick={() => navigate("/customer/registration")}
+          variant="outlined"
+        >
+          S'enregistrer
+        </Button>
+      </Box>
 
       <Typography
         color="error"
@@ -130,15 +133,6 @@ export default function LoginForm() {
       >
         {translateApiErrors(loginApiError, "Utilisateur")}
       </Typography>
-
-      <Box sx={{ display: "flex" }}>
-        <Button
-          onClick={() => navigate("/customer/registration")}
-          variant="outlined"
-        >
-          S'enregistrer
-        </Button>
-      </Box>
     </Box>
   );
 }

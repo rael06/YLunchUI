@@ -1,3 +1,4 @@
+import { AddCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
 import { Box, Button, Typography } from "@mui/material";
 import { ProductReadDto } from "../../../../models/Product";
 
@@ -15,14 +16,18 @@ export default function CartItem({
   removeProduct,
 }: Props) {
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", alignItems: "center" }}>
       <Typography>{product.name}</Typography>
       <Typography ml={2}>{quantity}</Typography>
-      <Button onClick={() => removeProduct(product)}>-</Button>
-      <Button onClick={() => addProduct(product)}>+</Button>
       <Typography ml={2}>
-        {`${(product.price * quantity).toFixed(2)}`.padStart(2, "0")}
+        {`${(product.price * quantity).toFixed(2)}`.padStart(2, "0")} €
       </Typography>
+      <Button onClick={() => removeProduct(product)} sx={{ marginLeft: 3 }}>
+        <RemoveCircleOutline />
+      </Button>
+      <Button onClick={() => addProduct(product)}>
+        <AddCircleOutline />
+      </Button>
     </Box>
   );
 }
