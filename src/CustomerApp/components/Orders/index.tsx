@@ -13,6 +13,7 @@ import { useQuery } from "react-query";
 import { translateOrderState } from "../../../common/translations/orderState";
 import {
   convertUtcToZonedDate,
+  convertUtcToZonedDateTime,
   convertUtcToZonedTime,
 } from "../../../common/utils/dates";
 import { OrderReadDto } from "../../models/Order";
@@ -40,10 +41,7 @@ export default function Orders() {
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>N° Réservation</TableCell>
               <TableCell sx={{ fontWeight: "bold" }} align="center">
-                Date
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold" }} align="center">
-                Créée à
+                Créée le
               </TableCell>
               <TableCell sx={{ fontWeight: "bold" }} align="center">
                 Réservée pour
@@ -67,13 +65,10 @@ export default function Orders() {
                     {order.id}
                   </TableCell>
                   <TableCell align="center">
-                    {convertUtcToZonedDate(order.creationDateTime)}
+                    {convertUtcToZonedDateTime(order.creationDateTime)}
                   </TableCell>
                   <TableCell align="center">
-                    {convertUtcToZonedTime(order.creationDateTime)}
-                  </TableCell>
-                  <TableCell align="center">
-                    {convertUtcToZonedTime(order.reservedForDateTime)}
+                    {convertUtcToZonedDateTime(order.reservedForDateTime)}
                   </TableCell>
                   <TableCell align="center">
                     {order.totalPrice.toFixed(2)} €

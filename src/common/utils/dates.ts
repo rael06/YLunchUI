@@ -5,7 +5,7 @@ function parseUtcString(date: string): string {
 }
 
 export function convertUtcToZonedDateTime(date: string) {
-  return format(toDate(parseUtcString(date)), "dd/MM/yyyy HH:mm:ss zzz", {
+  return format(toDate(parseUtcString(date)), "dd/MM/yyyy HH:mm:ss", {
     timeZone: "Europe/Paris",
   });
 }
