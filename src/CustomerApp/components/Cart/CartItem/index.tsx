@@ -1,5 +1,5 @@
 import { AddCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
-import { Box, Button, Typography } from "@mui/material";
+import { Button, TableCell } from "@mui/material";
 import { ProductReadDto } from "../../../../models/Product";
 
 type Props = {
@@ -16,18 +16,26 @@ export default function CartItem({
   removeProduct,
 }: Props) {
   return (
-    <Box sx={{ display: "flex", alignItems: "center" }}>
-      <Typography>{product.name}</Typography>
-      <Typography ml={2}>{quantity}</Typography>
-      <Typography ml={2}>
+    <>
+      <TableCell component="th" scope="row">
+        {product.name}
+      </TableCell>
+      <TableCell align="center">
+        {quantity.toString().padStart(2, "0")}
+      </TableCell>
+      <TableCell align="center">
         {`${(product.price * quantity).toFixed(2)}`.padStart(2, "0")} €
-      </Typography>
-      <Button onClick={() => removeProduct(product)} sx={{ marginLeft: 3 }}>
-        <RemoveCircleOutline />
-      </Button>
-      <Button onClick={() => addProduct(product)}>
-        <AddCircleOutline />
-      </Button>
-    </Box>
+      </TableCell>
+      <TableCell align="center">
+        <Button onClick={() => removeProduct(product)}>
+          <RemoveCircleOutline />
+        </Button>
+      </TableCell>
+      <TableCell align="center">
+        <Button onClick={() => addProduct(product)}>
+          <AddCircleOutline />
+        </Button>
+      </TableCell>
+    </>
   );
 }

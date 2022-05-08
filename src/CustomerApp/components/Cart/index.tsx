@@ -3,6 +3,12 @@ import {
   Card,
   CardContent,
   Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
@@ -68,20 +74,47 @@ export default function Cart() {
     <Card>
       <Container maxWidth="md">
         <CardContent>
+          {cart.items.length > 0 ? (
+            <TableContainer>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ fontWeight: "bold" }}>Nom</TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }} align="center">
+                      Quantité
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }} align="center">
+                      Prix total
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }} align="center">
+                      Retirer
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }} align="center">
+                      Ajouter
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {cart.items.map((cartItem) => (
+                    <TableRow
+                      key={cartItem.product.id}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <CartItem
+                        product={cartItem.product}
+                        quantity={cartItem.quantity}
+                        addProduct={addProduct}
+                        removeProduct={removeProduct}
+                      />
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          ) : (
+            <Typography>Panier vide</Typography>
+          )}
           <Box sx={{ display: "flex", flexDirection: "column" }}>
-            {cart.items.length > 0 ? (
-              cart.items.map((cartItem) => (
-                <CartItem
-                  key={cartItem.product.id}
-                  product={cartItem.product}
-                  quantity={cartItem.quantity}
-                  addProduct={addProduct}
-                  removeProduct={removeProduct}
-                />
-              ))
-            ) : (
-              <Typography> Panier vide</Typography>
-            )}
             {!!totalPrice && (
               <Typography>
                 {`${totalPrice.toFixed(2)}`.padStart(2, "0")} €
