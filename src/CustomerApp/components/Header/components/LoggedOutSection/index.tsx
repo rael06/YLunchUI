@@ -11,7 +11,9 @@ export default function LoggedOutSection() {
       </Box>
 
       <Box>
-        <Button onClick={() => navigate("login")}>Connexion</Button>
+        <Button sx={{ marginRight: 1 }} onClick={() => navigate("login")}>
+          Connexion
+        </Button>
       </Box>
     </Box>
   );

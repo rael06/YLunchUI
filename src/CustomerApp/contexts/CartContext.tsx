@@ -1,4 +1,5 @@
 import React from "react";
+import { getLocalStorageItem } from "../../common/services/localStorage";
 import { ProductReadDto } from "../../models/Product";
 
 type CartContextType = {
@@ -16,6 +17,11 @@ export type Cart = {
   items: CartItem[];
 };
 
+export function getCartFromLocalStorage(): Cart {
+  const cart = getLocalStorageItem("cart");
+  return cart ? JSON.parse(cart) : initialCart;
+}
+
 export const initialCart: Cart = { restaurantId: "", items: [] };
 
 export const CartContext = React.createContext<CartContextType>({
@@ -24,7 +30,7 @@ export const CartContext = React.createContext<CartContextType>({
 });
 
 export const CartProvider: React.FC = (props) => {
-  const [cart, setCart] = React.useState<Cart>(initialCart);
+  const [cart, setCart] = React.useState<Cart>(getCartFromLocalStorage());
 
   return (
     <CartContext.Provider

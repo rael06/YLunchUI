@@ -42,7 +42,12 @@ export default function LoggedInSection() {
         {email}
       </Typography>
 
-      <ProgressButton label="Déconnexion" status={status} onClick={logout} />
+      <ProgressButton
+        sx={{ marginRight: 1 }}
+        label="Déconnexion"
+        status={status}
+        onClick={logout}
+      />
     </Box>
   );
 }

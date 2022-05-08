@@ -9,6 +9,7 @@ import { CartContext } from "../../contexts/CartContext";
 import LoggedInSection from "./components/LoggedInSection";
 import LoggedOutSection from "./components/LoggedOutSection";
 import logo from "./ylunch-logo.png";
+import classes from "./style.module.scss";
 
 export default function Header() {
   const { currentUser, setCurrentUser } = useCurrentUser();
@@ -58,7 +59,9 @@ export default function Header() {
         </Button>
         <Button sx={{ marginRight: 1 }} onClick={() => navigate("cart")}>
           Panier{" "}
-          {cart.items.reduce((acc, cartItem) => acc + cartItem.quantity, 0)}
+          <Box className={classes.cartIndicator}>
+            {cart.items.reduce((acc, cartItem) => acc + cartItem.quantity, 0)}
+          </Box>
         </Button>
         {currentUser ? <LoggedInSection /> : <LoggedOutSection />}
       </Box>

@@ -85,9 +85,8 @@ export default function ProductCard({ product }: Props) {
       <CardActions sx={{ marginLeft: "auto", marginTop: "auto" }}>
         <Button
           variant="contained"
-          size="small"
-          sx={{ textTransform: "none" }}
           onClick={() => addProduct(product)}
+          sx={{ backgroundColor: "#26989bd4" }}
         >
           Réserver
         </Button>

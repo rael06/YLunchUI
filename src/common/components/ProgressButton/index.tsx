@@ -33,11 +33,11 @@ export default function ProgressButton({
   return (
     <Box
       sx={{
-        ...sx,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         marginRight: "auto",
+        ...sx,
       }}
     >
       <Button

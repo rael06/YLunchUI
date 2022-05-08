@@ -6,12 +6,12 @@ import {
 } from "../../common/services/localStorage";
 import { ProductReadDto } from "../../models/Product";
 import { getProductsApi } from "../services/api/products";
-import { Cart, CartContext, initialCart } from "./../contexts/CartContext";
-
-export function getCartFromLocalStorage(): Cart {
-  const cart = getLocalStorageItem("cart");
-  return cart ? JSON.parse(cart) : initialCart;
-}
+import {
+  Cart,
+  CartContext,
+  getCartFromLocalStorage,
+  initialCart,
+} from "./../contexts/CartContext";
 
 function useCart() {
   const { cart, setCart } = React.useContext(CartContext);
