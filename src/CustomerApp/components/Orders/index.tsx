@@ -1,5 +1,5 @@
 import {
-  Box,
+  Container,
   Table,
   TableBody,
   TableCell,
@@ -30,7 +30,7 @@ export default function Orders() {
   });
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column" }}>
+    <Container maxWidth="lg">
       <Typography mb={2} variant="h2" component="h1">
         Mes réservations
       </Typography>
@@ -86,6 +86,6 @@ export default function Orders() {
           </TableBody>
         </Table>
       </TableContainer>
-    </Box>
+    </Container>
   );
 }
