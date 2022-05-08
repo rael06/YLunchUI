@@ -36,7 +36,7 @@ export default function LoggedInSection() {
   return (
     <Box display="flex" alignItems="center">
       <Button sx={{ marginRight: 1 }} onClick={() => navigate("orders")}>
-        Mes commandes
+        Mes réservations
       </Button>
       <Typography variant="body1" marginRight={1}>
         {email}

@@ -1,11 +1,11 @@
 import { Box } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
+import Cart from "../Cart";
 import Login from "../Login";
+import Orders from "../Orders";
 import Registration from "../Registration";
 import Restaurants from "../Restaurants";
 import RestaurantDetails from "../Restaurants/RestaurantCard/RestaurantDetails";
-import Cart from "../Cart";
-import Orders from "../Orders";
 
 export default function Body() {
   return (

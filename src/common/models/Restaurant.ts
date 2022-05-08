@@ -32,7 +32,7 @@ export type OpeningTimeReadDto = {
 export type ClosingDateReadDto = {
   id: string;
   restaurantId: string;
-  closingDate: Date;
+  closingDate: string;
 };
 
 export enum DayOfWeek {

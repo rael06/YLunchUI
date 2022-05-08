@@ -1,9 +1,7 @@
 import { format, toDate } from "date-fns-tz";
 
-export function convertUtcToZonedDateTime(utc: Date) {
-  console.log(new Date(utc).toUTCString());
-
-  return format(toDate(utc), "dd/MM/yyyy HH:mm:ss zzz", {
+export function convertUtcToZonedDateTime(utc: string) {
+  return format(toDate(utc + "Z"), "dd/MM/yyyy HH:mm:ss zzz", {
     timeZone: "Europe/Paris",
   });
 }

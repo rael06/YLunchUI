@@ -1,6 +1,7 @@
 import { Box, Button } from "@mui/material";
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { GoBackButton } from "../../../common/components/GoBackButton";
 import useCurrentUser from "../../../common/hooks/useCurrentUser";
 import { getCurrentUserApi } from "../../../common/services/api/authentication";
 import { getLocalStorageItem } from "../../../common/services/localStorage";
@@ -34,16 +35,22 @@ export default function Header() {
       paddingX={2}
       component={"header"}
     >
-      <Link to="/">
-        <Box
-          component={"img"}
-          sx={{ height: "50px" }}
-          src={logo}
-          alt="Logo Ylunch"
-        />
-      </Link>
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Button onClick={() => navigate("restaurants")}>
+          <Box
+            component={"img"}
+            sx={{ height: "50px" }}
+            src={logo}
+            alt="Logo Ylunch"
+          />
+        </Button>
+        <GoBackButton />
+      </Box>
 
       <Box sx={{ display: "flex" }}>
+        <Button sx={{ marginRight: 1 }} onClick={() => navigate("restaurants")}>
+          Restaurants
+        </Button>
         <Button sx={{ marginRight: 1 }} onClick={() => navigate("cart")}>
           Panier
         </Button>

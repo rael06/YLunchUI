@@ -1,13 +1,14 @@
 import { CheckCircle, Error } from "@mui/icons-material";
-import { Box, Button, CircularProgress } from "@mui/material";
+import { Box, Button, CircularProgress, SxProps } from "@mui/material";
 
 export type ProgressButtonStatus = "idling" | "loading" | "success" | "error";
-type Props = {
+type Props = React.ComponentPropsWithoutRef<"button"> & {
   label: string;
   onClick?: () => void;
   status: ProgressButtonStatus;
   type?: "submit" | "button";
   variant?: "outlined" | "text" | "contained";
+  sx?: SxProps;
 };
 
 const colors: Record<
@@ -26,10 +27,13 @@ export default function ProgressButton({
   status,
   type = "button",
   variant = "outlined",
+  disabled,
+  sx = {},
 }: Props) {
   return (
     <Box
       sx={{
+        ...sx,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -39,7 +43,7 @@ export default function ProgressButton({
       <Button
         type={type}
         onClick={onClick}
-        disabled={status === "loading"}
+        disabled={disabled || status === "loading"}
         variant={variant}
         color={colors[status]}
       >

@@ -1,9 +1,9 @@
 import { RestaurantReadDto } from "../../../common/models/Restaurant";
 import {
   apiUrl,
-  restMethods,
   getAnonymousHeaders,
   processResponse,
+  restMethods,
 } from "../../../common/services/api/helpers";
 
 export async function getRestaurantsApi(): Promise<RestaurantReadDto[]> {

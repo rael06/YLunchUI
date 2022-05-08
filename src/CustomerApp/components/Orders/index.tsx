@@ -10,7 +10,6 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useQuery } from "react-query";
-import { GoBackButton } from "../../../common/components/GoBackButton";
 import { convertUtcToZonedDateTime } from "../../../common/helpers/dates";
 import { translateOrderState } from "../../../common/translations/orderState";
 import { OrderReadDto } from "../../models/Order";
@@ -19,15 +18,16 @@ import { getOrdersApi } from "../../services/api/orders";
 export default function Orders() {
   const [orders, setOrders] = React.useState<OrderReadDto[]>([]);
 
-  useQuery("Orders", () => getOrdersApi(), {
+  useQuery("orders", () => getOrdersApi(), {
     onSuccess: (response) => {
       setOrders(response);
     },
+    // todo configure staleTime for performances
+    // staleTime: 1 * 60 * 1000,
   });
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
-      <GoBackButton />
       <Typography mb={2} variant="h2" component="h1">
         Mes réservations
       </Typography>

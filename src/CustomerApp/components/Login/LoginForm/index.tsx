@@ -29,27 +29,31 @@ export default function LoginForm() {
     formState: { errors },
     handleSubmit,
   } = useForm<Inputs>({ mode: "onBlur" });
-  const [apiErrors, setApiErrors] = React.useState<ApiError>();
   const { setCurrentUser } = useCurrentUser();
-  const { actAsync, status } = useAsyncAction();
+  const { actAsync, status, error: loginApiError } = useAsyncAction<ApiError>();
 
-  const mutation = useMutation((data: LoginRequestDto) => loginApi(data), {
-    onSuccess: async () => {
-      setCurrentUser(await getCurrentUserApi());
-    },
-    onError: (error: ApiError) => {
-      setApiErrors(error as ApiError);
-      setCurrentUser(undefined);
-      throw error;
-    },
-  });
+  const mutation = useMutation(
+    "user",
+    (data: LoginRequestDto) => loginApi(data),
+    {
+      onSuccess: async () => {
+        setCurrentUser(await getCurrentUserApi());
+      },
+      onError: (error: ApiError) => {
+        throw error;
+      },
+    }
+  );
 
-  const submit = async (data: LoginRequestDto) => {
+  async function submit(data: LoginRequestDto) {
     await actAsync({
       asyncAction: async () => await mutation.mutateAsync(data),
       onSuccessTimeoutAsync: async () => navigate("/customer/restaurants"),
+      onErrorAsync: async () => {
+        setCurrentUser(undefined);
+      },
     });
-  };
+  }
 
   return (
     <Box
@@ -93,11 +97,14 @@ export default function LoginForm() {
         }}
       />
       <ProgressButton type="submit" label="Envoyer" status={status} />
-      {apiErrors && (
-        <Typography color="error">
-          {translateApiErrors(apiErrors, "Utilisateur")}
-        </Typography>
-      )}
+      {loginApiError &&
+        (loginApiError.status === 401 ? (
+          <Typography color="error">Mauvais identifiants !</Typography>
+        ) : (
+          <Typography color="error">
+            {translateApiErrors(loginApiError, "Utilisateur")}
+          </Typography>
+        ))}
     </Box>
   );
 }

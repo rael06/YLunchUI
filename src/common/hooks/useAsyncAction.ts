@@ -6,18 +6,19 @@ import {
 
 type AsyncActionStatus = "idling" | "loading" | "success" | "error";
 
-type ActParams = {
+type ActAsyncParams<TError> = {
   asyncAction: () => Promise<unknown>;
   onSuccessAsync?: () => Promise<void>;
   onSuccessTimeoutAsync?: () => Promise<void>;
-  onErrorAsync?: (error: unknown) => Promise<void>;
+  onErrorAsync?: (error: TError) => Promise<void>;
   onErrorTimeoutAsync?: () => Promise<void>;
   successRecoveryTimeout?: number;
   errorRecoveryTimeout?: number;
 };
 
-function useAsyncAction() {
+function useAsyncAction<TError>() {
   const [status, setStatus] = React.useState<AsyncActionStatus>("idling");
+  const [error, setError] = React.useState<TError>();
 
   async function actAsync({
     asyncAction,
@@ -27,7 +28,7 @@ function useAsyncAction() {
     onErrorTimeoutAsync = async () => {},
     successRecoveryTimeout = defaultSuccessRecoveryTimeout,
     errorRecoveryTimeout = defaultErrorRecoveryTimeout,
-  }: ActParams) {
+  }: ActAsyncParams<TError>) {
     setStatus("loading");
     try {
       await asyncAction();
@@ -39,7 +40,8 @@ function useAsyncAction() {
       }, successRecoveryTimeout);
     } catch (error) {
       setStatus("error");
-      await onErrorAsync(error);
+      setError(error as TError);
+      await onErrorAsync(error as TError);
       setTimeout(async () => {
         setStatus("idling");
         await onErrorTimeoutAsync();
@@ -47,7 +49,7 @@ function useAsyncAction() {
     }
   }
 
-  return { actAsync, status };
+  return { actAsync, status, error };
 }
 
 export default useAsyncAction;

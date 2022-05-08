@@ -59,7 +59,7 @@ export default function RestaurantCard({ restaurant }: Props) {
           <HourglassBottomIcon></HourglassBottomIcon>
           {todayOrderOpeningTimes.length !== 0 ? (
             <>
-              <Typography ml={1}>Commandez</Typography>
+              <Typography ml={1}>Réservez</Typography>
               {todayOrderOpeningTimes.map((openingTime) => (
                 <OpeningTime key={openingTime.id} openingTime={openingTime} />
               ))}

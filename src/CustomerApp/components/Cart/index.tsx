@@ -1,13 +1,25 @@
 import { Button, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { addHours } from "date-fns";
-import { GoBackButton } from "../../../common/components/GoBackButton";
+import { toDate } from "date-fns-tz";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import ProgressButton from "../../../common/components/ProgressButton";
+import useAsyncAction from "../../../common/hooks/useAsyncAction";
+import { ApiError } from "../../../common/models/Common";
+import { translateApiErrors } from "../../../common/translations/apiErrors";
 import useCart from "../../hooks/useCart";
 import { addOrderApi } from "../../services/api/orders";
 import CartItem from "./CartItem";
 
 export default function Cart() {
+  const navigate = useNavigate();
   const { clear, cart, addProduct, removeProduct } = useCart();
+  const {
+    actAsync,
+    status,
+    error: addOrderApiError,
+  } = useAsyncAction<ApiError>();
+  const [isOrderSucceed, setIsOrderSucceed] = React.useState(false);
 
   const isCartEmpty = cart.items.length < 1;
 
@@ -17,18 +29,24 @@ export default function Cart() {
   }, 0);
 
   async function confirmOrder() {
-    return await addOrderApi(cart.restaurantId, {
-      productIds: cart.items
-        .map((item) => Array(item.quantity).fill(item.product.id))
-        .flat(),
-      customerComment: "",
-      reservedForDateTime: new Date("2022-05-12T11:55:50.857+02:00"),
+    await actAsync({
+      asyncAction: async () =>
+        await addOrderApi(cart.restaurantId, {
+          productIds: cart.items
+            .map((item) => Array(item.quantity).fill(item.product.id))
+            .flat(),
+          customerComment: "",
+          reservedForDateTime: toDate(
+            "2022-05-12T11:55:50.857+02:00"
+          ).toISOString(),
+        }),
+      onSuccessAsync: async () => setIsOrderSucceed(true),
+      // onSuccessTimeoutAsync: async () => clear(),
     });
   }
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
-      <GoBackButton />
       {cart.items.map((cartItem) => (
         <CartItem
           key={cartItem.product.id}
@@ -49,14 +67,41 @@ export default function Cart() {
       >
         Supprimer le panier
       </Button>
-      <Button
+      <ProgressButton
+        label="Confirmer la réservation"
         sx={{ marginTop: "10px" }}
-        variant="outlined"
         onClick={confirmOrder}
         disabled={isCartEmpty}
-      >
-        Confirmer la réservation
-      </Button>
+        status={status}
+      />
+      {isOrderSucceed && (
+        <Typography color="success">
+          Votre réservation a bien été enregistrée, elle est en attente
+          d'acceptation par le restaurant. Vous pouvez consulter son avancée
+          dans la section{" "}
+          <span
+            onClick={() => navigate("/customer/orders")}
+            style={{ cursor: "pointer", color: "#1976d2" }}
+          >
+            Mes réservations
+          </span>
+          .
+        </Typography>
+      )}
+      {addOrderApiError &&
+        addOrderApiError.status === 400 &&
+        (addOrderApiError.errors.reasons.includes(
+          "ReservedForDateTime must be set when the restaurant is open for orders."
+        ) ? (
+          <Typography color="error">
+            L'horaire de retrait doit être compris dans les horaires d'ouverture
+            à la commande du restaurant
+          </Typography>
+        ) : (
+          <Typography color="error">
+            {translateApiErrors(addOrderApiError, "Réservation")}
+          </Typography>
+        ))}
     </Box>
   );
 }

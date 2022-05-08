@@ -29,8 +29,11 @@ interface Inputs extends FieldValues {
 
 export default function RegistrationForm() {
   const navigate = useNavigate();
-  const [apiErrors, setApiErrors] = React.useState<ApiError>();
-  const { actAsync, status } = useAsyncAction();
+  const {
+    actAsync,
+    status,
+    error: addCustomerApiError,
+  } = useAsyncAction<ApiError>();
   const {
     register,
     formState: { errors },
@@ -39,10 +42,11 @@ export default function RegistrationForm() {
   } = useForm<Inputs>({ mode: "onBlur" });
 
   const mutation = useMutation(
+    "users",
     (data: CustomerCreateDto) => addCustomerApi(data),
     {
       onError: (error: ApiError) => {
-        setApiErrors(error);
+        throw error;
       },
     }
   );
@@ -172,9 +176,9 @@ export default function RegistrationForm() {
         }}
       />
       <ProgressButton type="submit" label="Envoyer" status={status} />
-      {apiErrors && (
+      {addCustomerApiError && (
         <Typography color="error">
-          {translateApiErrors(apiErrors, "Utilisateur")}
+          {translateApiErrors(addCustomerApiError, "Utilisateur")}
         </Typography>
       )}
     </Box>

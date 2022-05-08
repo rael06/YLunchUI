@@ -13,7 +13,7 @@ export type OrderStatusReadDto = {
   id: string;
   orderId: string;
   orderState: OrderState;
-  dateTime: Date;
+  dateTime: string;
 };
 
 export type OrderedProductReadDto = {
@@ -28,8 +28,8 @@ export type OrderedProductReadDto = {
   productTags: string;
   price: number;
   productType: 0;
-  creationDateTime: Date;
-  expirationDateTime: Date;
+  creationDateTime: string;
+  expirationDateTime: string;
   image: string;
 };
 
@@ -38,9 +38,9 @@ export type OrderReadDto = {
   userId: string;
   restaurantId: string;
   totalPrice: number;
-  creationDateTime: Date;
-  reservedForDateTime: Date;
-  acceptationDateTime: Date;
+  creationDateTime: string;
+  reservedForDateTime: string;
+  acceptationDateTime: string;
   customerComment: string;
   restaurantComment: string;
   isAcknowledged: true;
@@ -53,6 +53,6 @@ export type OrderReadDto = {
 
 export type OrderCreateDto = {
   productIds: string[];
-  reservedForDateTime: Date;
+  reservedForDateTime: string;
   customerComment: string;
 };
