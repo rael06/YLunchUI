@@ -14,7 +14,8 @@ export default function Body() {
         display: "flex",
         flexDirection: "column",
         flex: 1,
-        marginTop: "60px",
+        // height of header
+        marginTop: "62px",
       }}
     >
       <Routes>
