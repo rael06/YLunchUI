@@ -13,7 +13,7 @@ type Props = {
 export default function RestaurantCard({ restaurant }: Props) {
   const navigate = useNavigate();
 
-  let currentDayOfWeek = 1;
+  let currentDayOfWeek = 3;
   const todayPlaceOpeningTimes = restaurant.placeOpeningTimes.filter(
     (openingTime) => openingTime.dayOfWeek === currentDayOfWeek
   );

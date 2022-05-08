@@ -10,8 +10,11 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useQuery } from "react-query";
-import { convertUtcToZonedDateTime } from "../../../common/helpers/dates";
 import { translateOrderState } from "../../../common/translations/orderState";
+import {
+  convertUtcToZonedDate,
+  convertUtcToZonedTime,
+} from "../../../common/utils/dates";
 import { OrderReadDto } from "../../models/Order";
 import { getOrdersApi } from "../../services/api/orders";
 
@@ -49,9 +52,6 @@ export default function Orders() {
                 Prix total
               </TableCell>
               <TableCell sx={{ fontWeight: "bold" }} align="right">
-                Changement d'état à
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold" }} align="right">
                 État
               </TableCell>
             </TableRow>
@@ -67,21 +67,16 @@ export default function Orders() {
                     {order.id}
                   </TableCell>
                   <TableCell align="right">
-                    {convertUtcToZonedDateTime(order.creationDateTime)}
+                    {convertUtcToZonedDate(order.creationDateTime)}
                   </TableCell>
                   <TableCell align="right">
-                    {convertUtcToZonedDateTime(order.creationDateTime)}
+                    {convertUtcToZonedTime(order.creationDateTime)}
                   </TableCell>
                   <TableCell align="right">
-                    {convertUtcToZonedDateTime(order.reservedForDateTime)}
+                    {convertUtcToZonedTime(order.reservedForDateTime)}
                   </TableCell>
                   <TableCell align="right">
                     {order.totalPrice.toFixed(2)} €
-                  </TableCell>
-                  <TableCell align="right">
-                    {convertUtcToZonedDateTime(
-                      order.currentOrderStatus.dateTime
-                    )}
                   </TableCell>
                   <TableCell align="right">
                     {translateOrderState(order.currentOrderStatus.orderState)}
