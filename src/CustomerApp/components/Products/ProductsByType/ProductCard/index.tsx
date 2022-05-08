@@ -21,7 +21,11 @@ export default function ProductCard({ product }: Props) {
   const { addProduct } = useCart();
 
   return (
-    <Card>
+    <Card sx={{
+      display: "flex",
+      flexDirection: "column",
+      height: "100%"
+    }}>
       <CardMedia
         component="img"
         src={image !== null ? image : imgdefault}
@@ -35,12 +39,12 @@ export default function ProductCard({ product }: Props) {
         <Box
           mb={2}
           component="div"
-          sx={{ display: "flex", justifyContent: "space-between" }}
+          sx={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}
         >
-          <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+          <Typography variant="subtitle1" sx={{ fontWeight: "bold", mr: 5, minHeight: "3.5rem" }}>
             {name}
           </Typography>
-          <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
+          <Typography variant="subtitle2" sx={{ fontWeight: "bold", whiteSpace: "nowrap" }}>
             {price.toFixed(2)} €
           </Typography>
         </Box>
@@ -61,7 +65,7 @@ export default function ProductCard({ product }: Props) {
           </Box>
         </Box>
       </CardContent>
-      <CardActions sx={{ float: "right" }}>
+      <CardActions sx={{ marginLeft: "auto", marginTop: "auto" }}>
         <Button
           variant="contained"
           size="small"
