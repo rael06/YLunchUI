@@ -57,6 +57,7 @@ export default function RegistrationForm() {
       onSuccessTimeoutAsync: async () =>
         navigate("/customer/login", {
           state: {
+            isFromRegistration: true,
             message:
               "Votre compte a bien été créé, veuillez-vous authentifier avec votre login/mot de passe",
           },
@@ -175,7 +176,12 @@ export default function RegistrationForm() {
           },
         }}
       />
-      <ProgressButton type="submit" label="Envoyer" status={status} />
+      <ProgressButton
+        type="submit"
+        label="S'enregistrer"
+        status={status}
+        sx={{ marginTop: 3 }}
+      />
       {addCustomerApiError && (
         <Typography color="error">
           {translateApiErrors(addCustomerApiError, "Utilisateur")}

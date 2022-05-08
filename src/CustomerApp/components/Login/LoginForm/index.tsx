@@ -1,8 +1,8 @@
-import { Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { FieldValues, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import FormInput from "../../../../common/components/FormInput";
 import ProgressButton from "../../../../common/components/ProgressButton";
 import { ynovEmailRegExp } from "../../../../common/constants/regexps";
@@ -23,6 +23,8 @@ interface Inputs extends FieldValues {
 
 export default function LoginForm() {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const {
     register,
     formState: { errors },
@@ -47,7 +49,11 @@ export default function LoginForm() {
   async function submit(data: LoginRequestDto) {
     await actAsync({
       asyncAction: async () => await mutation.mutateAsync(data),
-      onSuccessTimeoutAsync: async () => navigate(-1),
+      onSuccessTimeoutAsync: async () =>
+        location.state &&
+        (location.state as { isFromRegistration: boolean }).isFromRegistration
+          ? navigate("/customer/restaurants")
+          : navigate(-1),
       onErrorAsync: async () => {
         setCurrentUser(undefined);
       },
@@ -60,6 +66,11 @@ export default function LoginForm() {
       component={"form"}
       onSubmit={handleSubmit((data) => submit(data))}
     >
+      {location.state && (
+        <Typography>
+          {(location.state as { message: string }).message}
+        </Typography>
+      )}
       <Typography
         variant="caption"
         sx={{ marginBottom: 2 }}
@@ -95,15 +106,39 @@ export default function LoginForm() {
           required: "Ce champs est requis",
         }}
       />
-      <ProgressButton type="submit" label="Envoyer" status={status} />
-      {loginApiError &&
-        (loginApiError.status === 401 ? (
-          <Typography color="error">Mauvais identifiants !</Typography>
-        ) : (
-          <Typography color="error">
-            {translateApiErrors(loginApiError, "Utilisateur")}
-          </Typography>
-        ))}
+      <ProgressButton
+        type="submit"
+        label="Se connecter"
+        status={status}
+        sx={{ marginTop: 3 }}
+      />
+
+      <Typography
+        color="error"
+        visibility={
+          loginApiError && loginApiError.status === 401 ? "visible" : "hidden"
+        }
+      >
+        Identifiants inconnus ! Veuillez verifier vos identifiants ou vous
+        enregistrer.
+      </Typography>
+      <Typography
+        color="error"
+        visibility={
+          loginApiError && loginApiError.status !== 401 ? "visible" : "hidden"
+        }
+      >
+        {translateApiErrors(loginApiError, "Utilisateur")}
+      </Typography>
+
+      <Box sx={{ display: "flex" }}>
+        <Button
+          onClick={() => navigate("/customer/registration")}
+          variant="outlined"
+        >
+          S'enregistrer
+        </Button>
+      </Box>
     </Box>
   );
 }

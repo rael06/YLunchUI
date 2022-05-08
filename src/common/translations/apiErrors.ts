@@ -13,14 +13,17 @@ function translatedApiErrors(
 }
 
 export function translateApiErrors(
-  error: ApiError,
+  error: ApiError | undefined,
   entityDescription: string
 ): string {
   if (
+    error &&
     error.status === 400 &&
     error.title === "One or more validation errors occurred."
   ) {
     return "Données invalides !";
   }
-  return translatedApiErrors(entityDescription)[error.status];
+  return error
+    ? translatedApiErrors(entityDescription)[error.status]
+    : translatedApiErrors(entityDescription)[400];
 }
