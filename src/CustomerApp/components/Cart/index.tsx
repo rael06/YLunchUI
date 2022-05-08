@@ -5,6 +5,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import ProgressButton from "../../../common/components/ProgressButton";
 import useAsyncAction from "../../../common/hooks/useAsyncAction";
+import useCurrentUser from "../../../common/hooks/useCurrentUser";
 import { ApiError } from "../../../common/models/Common";
 import { translateApiErrors } from "../../../common/translations/apiErrors";
 import useCart from "../../hooks/useCart";
@@ -14,6 +15,9 @@ import CartItem from "./CartItem";
 export default function Cart() {
   const navigate = useNavigate();
   const { clear, cart, addProduct, removeProduct } = useCart();
+  const [isNotLoggedInWhenConfirmOrder, setIsNotLoggedInWhenConfirmOrder] =
+    React.useState(false);
+  const { currentUser } = useCurrentUser();
   const {
     actAsync,
     status,
@@ -29,20 +33,24 @@ export default function Cart() {
   }, 0);
 
   async function confirmOrder() {
-    await actAsync({
-      asyncAction: async () =>
-        await addOrderApi(cart.restaurantId, {
-          productIds: cart.items
-            .map((item) => Array(item.quantity).fill(item.product.id))
-            .flat(),
-          customerComment: "",
-          reservedForDateTime: toDate(
-            "2022-05-12T11:55:50.857+02:00"
-          ).toISOString(),
-        }),
-      onSuccessAsync: async () => setIsOrderSucceed(true),
-      // onSuccessTimeoutAsync: async () => clear(),
-    });
+    if (!currentUser) {
+      setIsNotLoggedInWhenConfirmOrder(true);
+    } else {
+      await actAsync({
+        asyncAction: async () =>
+          await addOrderApi(cart.restaurantId, {
+            productIds: cart.items
+              .map((item) => Array(item.quantity).fill(item.product.id))
+              .flat(),
+            customerComment: "",
+            reservedForDateTime: toDate(
+              "2022-05-12T11:55:50.857+02:00"
+            ).toISOString(),
+          }),
+        onSuccessAsync: async () => setIsOrderSucceed(true),
+        // onSuccessTimeoutAsync: async () => clear(),
+      });
+    }
   }
 
   return (
@@ -71,11 +79,23 @@ export default function Cart() {
         label="Confirmer la réservation"
         sx={{ marginTop: "10px" }}
         onClick={confirmOrder}
-        disabled={isCartEmpty}
+        disabled={isCartEmpty || isNotLoggedInWhenConfirmOrder}
         status={status}
       />
-      {isOrderSucceed && (
-        <Typography color="success">
+      {isNotLoggedInWhenConfirmOrder && (
+        <Typography>
+          Veuillez vous{" "}
+          <span
+            onClick={() => navigate("/customer/login")}
+            style={{ cursor: "pointer", color: "#1976d2" }}
+          >
+            connecter
+          </span>{" "}
+          pour enregistrer votre réservation.
+        </Typography>
+      )}
+      {currentUser && isOrderSucceed && (
+        <Typography>
           Votre réservation a bien été enregistrée, elle est en attente
           d'acceptation par le restaurant. Vous pouvez consulter son avancée
           dans la section{" "}

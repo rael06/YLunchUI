@@ -6,8 +6,6 @@ type Props = {
 };
 
 export default function Order({ order }: Props) {
-  console.log(order);
-
   return (
     <Box sx={{ diplay: "flex", flexDirection: "row" }}>
       <Typography>{order.currentOrderStatus.id}</Typography>

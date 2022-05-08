@@ -10,7 +10,7 @@ import {
 
 import { ProductReadDto } from "../../../../../models/Product";
 import useCart from "../../../../hooks/useCart";
-import imgdefault from "./img-product.png";
+import placeholderImage from "./product-placeholder-image.png";
 
 type Props = {
   product: ProductReadDto;
@@ -30,7 +30,7 @@ export default function ProductCard({ product }: Props) {
     >
       <CardMedia
         component="img"
-        src={image !== null ? image : imgdefault}
+        src={image !== null ? image : placeholderImage}
         alt="icone ynov"
         height="140"
         sx={{

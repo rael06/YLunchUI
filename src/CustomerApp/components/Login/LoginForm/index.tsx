@@ -1,6 +1,5 @@
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
@@ -48,7 +47,7 @@ export default function LoginForm() {
   async function submit(data: LoginRequestDto) {
     await actAsync({
       asyncAction: async () => await mutation.mutateAsync(data),
-      onSuccessTimeoutAsync: async () => navigate("/customer/restaurants"),
+      onSuccessTimeoutAsync: async () => navigate(-1),
       onErrorAsync: async () => {
         setCurrentUser(undefined);
       },
