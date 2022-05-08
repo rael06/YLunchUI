@@ -81,22 +81,6 @@ export default function RegistrationForm() {
       <FormInput
         register={register}
         errors={errors}
-        label="Nom*"
-        name="lastname"
-        // Todo remove initialValue
-        initialValue="lastname"
-        rules={{
-          required: "Ce champs est requis",
-          pattern: {
-            value: firstOrLastNameRegExp,
-            message:
-              "Votre nom ne doit contenir que des caractères alphabétiques. Exemple : Dupont",
-          },
-        }}
-      />
-      <FormInput
-        register={register}
-        errors={errors}
         label="Prénom*"
         name="firstname"
         // Todo remove initialValue
@@ -107,6 +91,22 @@ export default function RegistrationForm() {
             value: firstOrLastNameRegExp,
             message:
               "Votre prénom ne doit contenir que des caractères alphabétiques. Exemple : Henri",
+          },
+        }}
+      />
+      <FormInput
+        register={register}
+        errors={errors}
+        label="Nom*"
+        name="lastname"
+        // Todo remove initialValue
+        initialValue="lastname"
+        rules={{
+          required: "Ce champs est requis",
+          pattern: {
+            value: firstOrLastNameRegExp,
+            message:
+              "Votre nom ne doit contenir que des caractères alphabétiques. Exemple : Dupont",
           },
         }}
       />
