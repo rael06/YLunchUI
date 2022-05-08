@@ -12,9 +12,8 @@ import React from "react";
 import { useQuery } from "react-query";
 import { translateOrderState } from "../../../common/translations/orderState";
 import {
-  convertUtcToZonedDate,
-  convertUtcToZonedDateTime,
-  convertUtcToZonedTime,
+  compareUtcDateTime,
+  formatUtcToZonedDateTime,
 } from "../../../common/utils/dates";
 import { OrderReadDto } from "../../models/Order";
 import { getOrdersApi } from "../../services/api/orders";
@@ -24,7 +23,15 @@ export default function Orders() {
 
   useQuery("orders", () => getOrdersApi(), {
     onSuccess: (response) => {
-      setOrders(response);
+      setOrders(
+        response.sort((o1, o2) =>
+          compareUtcDateTime(
+            o1.creationDateTime,
+            o2.creationDateTime,
+            "descending"
+          )
+        )
+      );
     },
     // todo configure staleTime for performances
     // staleTime: 1 * 60 * 1000,
@@ -65,10 +72,10 @@ export default function Orders() {
                     {order.id}
                   </TableCell>
                   <TableCell align="center">
-                    {convertUtcToZonedDateTime(order.creationDateTime)}
+                    {formatUtcToZonedDateTime(order.creationDateTime)}
                   </TableCell>
                   <TableCell align="center">
-                    {convertUtcToZonedDateTime(order.reservedForDateTime)}
+                    {formatUtcToZonedDateTime(order.reservedForDateTime)}
                   </TableCell>
                   <TableCell align="center">
                     {order.totalPrice.toFixed(2)} €

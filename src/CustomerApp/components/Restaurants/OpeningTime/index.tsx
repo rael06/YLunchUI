@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import { OpeningTimeReadDto } from "../../../../common/models/Restaurant";
-import { convertUtcMinutesToZonedTime } from "../../../../common/utils/dates";
+import { formatUtcMinutesToZonedTime } from "../../../../common/utils/dates";
 
 type Props = {
   openingTime: OpeningTimeReadDto;
@@ -11,8 +11,8 @@ export default function OpeningTime({ openingTime }: Props) {
 
   return (
     <Typography mx={1}>
-      de {convertUtcMinutesToZonedTime(offsetInMinutes)} à{" "}
-      {convertUtcMinutesToZonedTime(offsetInMinutes + durationInMinutes)}
+      de {formatUtcMinutesToZonedTime(offsetInMinutes)} à{" "}
+      {formatUtcMinutesToZonedTime(offsetInMinutes + durationInMinutes)}
     </Typography>
   );
 }
