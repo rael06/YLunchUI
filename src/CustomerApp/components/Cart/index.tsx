@@ -59,6 +59,11 @@ export default function Cart() {
     }
   }
 
+  function clearCart() {
+    setIsNotLoggedInWhenConfirmOrder(false);
+    clear();
+  }
+
   return (
     <Card>
       <Container maxWidth="md">
@@ -93,7 +98,7 @@ export default function Cart() {
               <Button
                 sx={{ marginTop: "10px" }}
                 variant="outlined"
-                onClick={() => clear()}
+                onClick={clearCart}
                 disabled={isCartEmpty}
               >
                 Supprimer le panier
@@ -125,20 +130,35 @@ export default function Cart() {
                 .
               </Typography>
             )}
-            {addOrderApiError &&
-              addOrderApiError.status === 400 &&
-              (addOrderApiError.errors.reasons.includes(
-                "ReservedForDateTime must be set when the restaurant is open for orders."
-              ) ? (
-                <Typography color="error">
-                  L'horaire de retrait doit être compris dans les horaires
-                  d'ouverture à la commande du restaurant
-                </Typography>
-              ) : (
-                <Typography color="error">
-                  {translateApiErrors(addOrderApiError, "Réservation")}
-                </Typography>
-              ))}
+            <Typography
+              color="error"
+              visibility={
+                addOrderApiError &&
+                addOrderApiError.status === 400 &&
+                addOrderApiError.errors.reasons.includes(
+                  "ReservedForDateTime must be set when the restaurant is open for orders."
+                )
+                  ? "visible"
+                  : "hidden"
+              }
+            >
+              L'horaire de retrait doit être compris dans les horaires
+              d'ouverture à la commande du restaurant
+            </Typography>
+            <Typography
+              color="error"
+              visibility={
+                addOrderApiError &&
+                addOrderApiError.status === 400 &&
+                !addOrderApiError.errors.reasons.includes(
+                  "ReservedForDateTime must be set when the restaurant is open for orders."
+                )
+                  ? "visible"
+                  : "hidden"
+              }
+            >
+              {translateApiErrors(addOrderApiError, "Réservation")}
+            </Typography>
           </Box>
         </CardContent>
       </Container>
