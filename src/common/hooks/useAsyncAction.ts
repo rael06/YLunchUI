@@ -4,7 +4,7 @@ import {
   defaultSuccessRecoveryTimeout,
 } from "./../constants/timeouts";
 
-type AsyncActionStatus = "idling" | "loading" | "success" | "error";
+type AsyncActionStatus = "idle" | "loading" | "success" | "error";
 
 type ActAsyncParams<TError> = {
   asyncAction: () => Promise<unknown>;
@@ -17,7 +17,7 @@ type ActAsyncParams<TError> = {
 };
 
 function useAsyncAction<TError>() {
-  const [status, setStatus] = React.useState<AsyncActionStatus>("idling");
+  const [status, setStatus] = React.useState<AsyncActionStatus>("idle");
   const [error, setError] = React.useState<TError>();
 
   async function actAsync({
@@ -35,7 +35,7 @@ function useAsyncAction<TError>() {
       setStatus("success");
       await onSuccessAsync();
       setTimeout(async () => {
-        setStatus("idling");
+        setStatus("idle");
         await onSuccessTimeoutAsync();
       }, successRecoveryTimeout);
     } catch (error) {
@@ -43,7 +43,7 @@ function useAsyncAction<TError>() {
       setError(error as TError);
       await onErrorAsync(error as TError);
       setTimeout(async () => {
-        setStatus("idling");
+        setStatus("idle");
         await onErrorTimeoutAsync();
       }, errorRecoveryTimeout);
     }

@@ -1,9 +1,6 @@
 import React from "react";
 import { useMutation } from "react-query";
-import {
-  getLocalStorageItem,
-  setLocalStorageItem,
-} from "../../common/services/localStorage";
+import { setLocalStorageItem } from "../../common/services/localStorage";
 import { ProductReadDto } from "../../models/Product";
 import { getProductsApi } from "../services/api/products";
 import {

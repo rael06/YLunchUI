@@ -1,7 +1,7 @@
 import { CheckCircle, Error } from "@mui/icons-material";
 import { Box, Button, CircularProgress, SxProps } from "@mui/material";
 
-export type ProgressButtonStatus = "idling" | "loading" | "success" | "error";
+export type ProgressButtonStatus = "idle" | "loading" | "success" | "error";
 type Props = React.ComponentPropsWithoutRef<"button"> & {
   label: string;
   onClick?: () => void;
@@ -15,7 +15,7 @@ const colors: Record<
   ProgressButtonStatus,
   "primary" | "secondary" | "success" | "error"
 > = {
-  idling: "primary",
+  idle: "primary",
   loading: "secondary",
   success: "success",
   error: "error",
@@ -47,9 +47,7 @@ export default function ProgressButton({
         variant={variant}
         color={colors[status]}
       >
-        <span
-          style={{ visibility: status === "idling" ? "visible" : "hidden" }}
-        >
+        <span style={{ visibility: status === "idle" ? "visible" : "hidden" }}>
           {label}
         </span>
       </Button>
