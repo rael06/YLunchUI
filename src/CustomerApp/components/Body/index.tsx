@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
+import useCurrentUser from "../../../common/hooks/useCurrentUser";
 import Cart from "../Cart";
 import Login from "../Login";
 import Orders from "../Orders";
@@ -8,6 +9,7 @@ import Restaurants from "../Restaurants";
 import RestaurantDetails from "../Restaurants/RestaurantCard/RestaurantDetails";
 
 export default function Body() {
+  const { currentUser } = useCurrentUser();
   return (
     <Box
       sx={{
@@ -20,9 +22,15 @@ export default function Body() {
     >
       <Routes>
         <Route path="login" element={<Login />} />
-        <Route path="orders" element={<Orders />} />
+        <Route
+          path="orders"
+          element={currentUser ? <Orders /> : <Restaurants />}
+        />
         <Route path="cart" element={<Cart />} />
-        <Route path="registration" element={<Registration />} />
+        <Route
+          path="registration"
+          element={currentUser ? <Registration /> : <Restaurants />}
+        />
         <Route
           path="restaurants/:restaurantId"
           element={<RestaurantDetails />}

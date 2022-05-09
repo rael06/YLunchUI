@@ -1,5 +1,14 @@
 import React from "react";
-import { UserReadDto } from "../../common/models/Authentication";
+import { useMutation } from "react-query";
+import {
+  LoginRequestDto,
+  UserReadDto,
+} from "../../common/models/Authentication";
+import { ApiError } from "../../common/models/Common";
+import {
+  loginApi,
+  getCurrentUserApi,
+} from "../../common/services/api/authentication";
 
 type CurrentUserContextType = {
   currentUser: UserReadDto | undefined;
@@ -13,6 +22,12 @@ export const CurrentUserContext = React.createContext<CurrentUserContextType>({
 
 export const CurrentUserProvider: React.FC = (props) => {
   const [currentUser, setCurrentUser] = React.useState<UserReadDto>();
+
+  useMutation("user", (data: LoginRequestDto) => loginApi(data), {
+    onSuccess: async () => {
+      setCurrentUser(await getCurrentUserApi());
+    },
+  });
 
   return (
     <CurrentUserContext.Provider
