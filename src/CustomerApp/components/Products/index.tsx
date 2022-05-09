@@ -1,4 +1,3 @@
-import React from "react";
 import { useQuery } from "react-query";
 import { ProductReadDto, ProductType } from "../../../models/Product";
 import { getProductsApi } from "../../services/api/products";
@@ -9,15 +8,11 @@ type Props = {
 };
 
 export default function Products({ restaurantId }: Props) {
-  const [products, setProducts] = React.useState<ProductReadDto[]>([]);
+  const { data: products } = useQuery("products", () =>
+    getProductsApi({ restaurantId: restaurantId! })
+  );
 
-  useQuery("products", () => getProductsApi({ restaurantId: restaurantId! }), {
-    onSuccess: (response) => {
-      setProducts(response);
-    },
-  });
-
-  if (!restaurantId) {
+  if (!restaurantId || !products) {
     return <></>;
   }
 

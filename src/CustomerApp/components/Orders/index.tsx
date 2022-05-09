@@ -8,62 +8,56 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import React from "react";
 import { useQuery } from "react-query";
 import { translateOrderState } from "../../../common/translations/orderState";
 import {
   compareUtcDateTime,
   formatUtcToZonedDateTime,
 } from "../../../common/utils/dates";
-import { OrderReadDto } from "../../models/Order";
 import { getOrdersApi } from "../../services/api/orders";
 
 export default function Orders() {
-  const [orders, setOrders] = React.useState<OrderReadDto[]>([]);
+  const { data: orders } = useQuery("orders", () => getOrdersApi());
 
-  useQuery("orders", () => getOrdersApi(), {
-    onSuccess: (response) => {
-      setOrders(
-        response.sort((o1, o2) =>
-          compareUtcDateTime(
-            o1.creationDateTime,
-            o2.creationDateTime,
-            "descending"
-          )
-        )
-      );
-    },
-    // todo configure staleTime for performances
-    // staleTime: 1 * 60 * 1000,
-  });
+  if (!orders) {
+    return <></>;
+  }
+
+  const sortedOrders = orders.sort((o1, o2) =>
+    compareUtcDateTime(o1.creationDateTime, o2.creationDateTime, "descending")
+  );
 
   return (
     <Container maxWidth="lg">
       <Typography mb={2} variant="h2" component="h1">
         Mes réservations
       </Typography>
-      <TableContainer>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ fontWeight: "bold" }}>N° Réservation</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }} align="center">
-                Créée le
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold" }} align="center">
-                Réservée pour
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold" }} align="center">
-                Prix total
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold" }} align="center">
-                État
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {orders.length > 0 &&
-              orders.map((order) => (
+      {sortedOrders.length === 0 ? (
+        <Typography>Aucune réservation enregistrée</Typography>
+      ) : (
+        <TableContainer>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ fontWeight: "bold" }}>
+                  N° Réservation
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold" }} align="center">
+                  Créée le
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold" }} align="center">
+                  Réservée pour
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold" }} align="center">
+                  Prix total
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold" }} align="center">
+                  État
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {sortedOrders.map((order) => (
                 <TableRow
                   key={order.id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -85,9 +79,10 @@ export default function Orders() {
                   </TableCell>
                 </TableRow>
               ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
     </Container>
   );
 }
