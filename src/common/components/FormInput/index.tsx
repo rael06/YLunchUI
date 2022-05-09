@@ -4,9 +4,9 @@ import { Path, UseFormRegister, FieldValues } from "react-hook-form";
 type FieldData<T extends FieldValues> = {
   label: string;
   name: Path<T>;
-  rules: {};
+  rules?: {};
   register: UseFormRegister<T>;
-  errors: FieldValues;
+  errors?: FieldValues;
   type?: string;
   initialValue?: unknown;
 };
@@ -14,9 +14,9 @@ type FieldData<T extends FieldValues> = {
 export default function FormInput<T extends FieldValues>({
   label,
   name,
-  rules,
+  rules = {},
   register,
-  errors,
+  errors = {},
   type = "text",
   initialValue = "",
 }: FieldData<T>) {
