@@ -1,3 +1,4 @@
+import React from "react";
 import { useQuery } from "react-query";
 import { ProductReadDto, ProductType } from "../../../models/Product";
 import { getProductsApi } from "../../services/api/products";
@@ -12,36 +13,50 @@ export default function Products({ restaurantId }: Props) {
     getProductsApi({ restaurantId: restaurantId! })
   );
 
-  if (!restaurantId || !products) {
-    return <></>;
-  }
-
   const classifiedProductsByType: Record<
     "starter" | "main" | "dessert" | "drink" | "menu" | "daily" | "other",
     ProductReadDto[]
-  > = {
-    starter: products.filter(
-      (product) => product.productType === ProductType.Starter
-    ),
-    main: products.filter(
-      (product) => product.productType === ProductType.Main
-    ),
-    dessert: products.filter(
-      (product) => product.productType === ProductType.Dessert
-    ),
-    drink: products.filter(
-      (product) => product.productType === ProductType.Drink
-    ),
-    menu: products.filter(
-      (product) => product.productType === ProductType.Menu
-    ),
-    daily: products.filter(
-      (product) => product.productType === ProductType.Daily
-    ),
-    other: products.filter(
-      (product) => product.productType === ProductType.Other
-    ),
-  };
+  > = React.useMemo(
+    () =>
+      products
+        ? {
+            starter: products.filter(
+              (product) => product.productType === ProductType.Starter
+            ),
+            main: products.filter(
+              (product) => product.productType === ProductType.Main
+            ),
+            dessert: products.filter(
+              (product) => product.productType === ProductType.Dessert
+            ),
+            drink: products.filter(
+              (product) => product.productType === ProductType.Drink
+            ),
+            menu: products.filter(
+              (product) => product.productType === ProductType.Menu
+            ),
+            daily: products.filter(
+              (product) => product.productType === ProductType.Daily
+            ),
+            other: products.filter(
+              (product) => product.productType === ProductType.Other
+            ),
+          }
+        : {
+            starter: [],
+            main: [],
+            dessert: [],
+            drink: [],
+            menu: [],
+            daily: [],
+            other: [],
+          },
+    [products]
+  );
+
+  if (!restaurantId || !products) {
+    return <></>;
+  }
 
   return (
     <div>
