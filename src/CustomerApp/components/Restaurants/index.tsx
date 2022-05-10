@@ -9,8 +9,11 @@ export default function Restaurants() {
 
   return (
     <Box className={classes.wrapper}>
-      {restaurants?.map((restaurant) => (
-        <RestaurantCard key={restaurant.id} restaurant={restaurant} />
+      {restaurants?.map((restaurant, i) => (
+        <RestaurantCard key={restaurant.id} restaurant={restaurant} 
+        orientation={i % 2 === 0 ? "rtl" : "ltr"}
+        color={i % 2 === 0 ? "#03989e" : "#ff914d"}
+        />
       ))}
     </Box>
   );
