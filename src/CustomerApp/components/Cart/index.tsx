@@ -34,7 +34,7 @@ import {
 import useCart from "../../hooks/useCart";
 import { addOrderApi } from "../../services/api/orders";
 import { getRestaurantByIdApi } from "../../services/api/restaurants";
-import CartItem from "./CartItem";
+import CartItemRow from "./CartItemRow";
 
 interface Inputs extends FieldValues {
   customerComment: string;
@@ -166,19 +166,12 @@ export default function Cart() {
                   </TableHead>
                   <TableBody>
                     {cart.items.map((cartItem) => (
-                      <TableRow
+                      <CartItemRow
                         key={cartItem.product.id}
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <CartItem
-                          product={cartItem.product}
-                          quantity={cartItem.quantity}
-                          addProduct={addProduct}
-                          removeProduct={removeProduct}
-                        />
-                      </TableRow>
+                        cartItem={cartItem}
+                        addProduct={addProduct}
+                        removeProduct={removeProduct}
+                      />
                     ))}
                   </TableBody>
                 </Table>
@@ -208,22 +201,19 @@ export default function Cart() {
                     <InputLabel id="reserved-for-time-label">
                       Horaire de retrait souhaité
                     </InputLabel>
-                    {restaurant && (
-                      <Select
-                        labelId="reserved-for-time-label"
-                        id="reserved-for-time"
-                        value={reservedForTime}
-                        onChange={(e) => setReservedForTime(e.target.value)}
-                      >
-                        {Object.keys(reservedForTimeOptions).map(
-                          (optionKey) => (
-                            <MenuItem key={optionKey} value={optionKey}>
-                              {optionKey}
-                            </MenuItem>
-                          )
-                        )}
-                      </Select>
-                    )}
+                    <Select
+                      labelId="reserved-for-time-label"
+                      id="reserved-for-time"
+                      value={reservedForTime}
+                      onChange={(e) => setReservedForTime(e.target.value)}
+                    >
+                      {restaurant &&
+                        Object.keys(reservedForTimeOptions).map((optionKey) => (
+                          <MenuItem key={optionKey} value={optionKey}>
+                            {optionKey}
+                          </MenuItem>
+                        ))}
+                    </Select>
                   </FormControl>
                   <Box sx={{ display: "flex", marginTop: 2 }}>
                     <ProgressButton

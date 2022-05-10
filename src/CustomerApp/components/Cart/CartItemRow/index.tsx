@@ -1,22 +1,27 @@
 import { AddCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
-import { Button, TableCell } from "@mui/material";
+import { Button, TableCell, TableRow } from "@mui/material";
 import { ProductReadDto } from "../../../../models/Product";
+import { CartItem } from "../../../contexts/CartContext";
 
 type Props = {
-  product: ProductReadDto;
-  quantity: number;
+  cartItem: CartItem;
   addProduct: (product: ProductReadDto) => void;
   removeProduct: (product: ProductReadDto) => void;
 };
 
-export default function CartItem({
-  product,
-  quantity,
+export default function CartItemRow({
+  cartItem,
   addProduct,
   removeProduct,
 }: Props) {
+  const { product, quantity } = cartItem;
+
   return (
-    <>
+    <TableRow
+      sx={{
+        "&:last-child td, &:last-child th": { border: 0 },
+      }}
+    >
       <TableCell component="th" scope="row">
         {product.name}
       </TableCell>
@@ -36,6 +41,6 @@ export default function CartItem({
           <AddCircleOutline />
         </Button>
       </TableCell>
-    </>
+    </TableRow>
   );
 }

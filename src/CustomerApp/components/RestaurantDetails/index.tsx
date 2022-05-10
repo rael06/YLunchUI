@@ -1,9 +1,9 @@
 import { Box } from "@mui/material";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
-import { getRestaurantByIdApi } from "../../../../services/api/restaurants";
-import Products from "../../../Products";
-import RestaurantHeader from "../RestaurantHeader";
+import { getRestaurantByIdApi } from "../../services/api/restaurants";
+import Products from "../Products";
+import RestaurantHeader from "./RestaurantHeader";
 
 export default function RestaurantDetails() {
   const urlParams = useParams();

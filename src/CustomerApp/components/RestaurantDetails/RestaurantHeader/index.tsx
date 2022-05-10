@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { RestaurantReadDto } from "../../../../../common/models/Restaurant";
+import { RestaurantReadDto } from "../../../../common/models/Restaurant";
 
 type Props = { restaurant: RestaurantReadDto };
 

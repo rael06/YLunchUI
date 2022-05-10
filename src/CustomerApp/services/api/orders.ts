@@ -23,3 +23,10 @@ export async function getOrdersApi(): Promise<OrderReadDto[]> {
     headers: await getAuthorizedHeaders(),
   }).then(async (response) => await processResponse(response));
 }
+
+export async function getOrderByIdApi(orderId: string): Promise<OrderReadDto> {
+  return fetch(`${apiUrl}/orders/${orderId}`, {
+    method: restMethods.get,
+    headers: await getAuthorizedHeaders(),
+  }).then(async (response) => await processResponse(response));
+}

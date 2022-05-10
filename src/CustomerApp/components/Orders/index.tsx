@@ -10,12 +10,9 @@ import {
 } from "@mui/material";
 import { useQuery } from "react-query";
 import { useLocation } from "react-router-dom";
-import { translateOrderState } from "../../../common/translations/orderState";
-import {
-  compareUtcDateTime,
-  formatUtcToZonedDateTime,
-} from "../../../common/utils/dates";
+import { compareUtcDateTime } from "../../../common/utils/dates";
 import { getOrdersApi } from "../../services/api/orders";
+import OrderRow from "./OrderRow";
 
 export default function Orders() {
   const { data: orders } = useQuery("orders", () => getOrdersApi());
@@ -77,26 +74,7 @@ export default function Orders() {
               </TableHead>
               <TableBody>
                 {sortedOrders.map((order) => (
-                  <TableRow
-                    key={order.id}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {order.id}
-                    </TableCell>
-                    <TableCell align="center">
-                      {formatUtcToZonedDateTime(order.creationDateTime)}
-                    </TableCell>
-                    <TableCell align="center">
-                      {formatUtcToZonedDateTime(order.reservedForDateTime)}
-                    </TableCell>
-                    <TableCell align="center">
-                      {order.totalPrice.toFixed(2)} €
-                    </TableCell>
-                    <TableCell align="center">
-                      {translateOrderState(order.currentOrderStatus.orderState)}
-                    </TableCell>
-                  </TableRow>
+                  <OrderRow key={order.id} order={order} />
                 ))}
               </TableBody>
             </Table>

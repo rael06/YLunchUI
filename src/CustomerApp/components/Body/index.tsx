@@ -3,10 +3,11 @@ import { Route, Routes } from "react-router-dom";
 import useCurrentUser from "../../../common/hooks/useCurrentUser";
 import Cart from "../Cart";
 import Login from "../Login";
+import OrderDetails from "../OrderDetails";
 import Orders from "../Orders";
 import Registration from "../Registration";
+import RestaurantDetails from "../RestaurantDetails";
 import Restaurants from "../Restaurants";
-import RestaurantDetails from "../Restaurants/RestaurantCard/RestaurantDetails";
 
 export default function Body() {
   const { currentUser } = useCurrentUser();
@@ -21,21 +22,29 @@ export default function Body() {
       }}
     >
       <Routes>
-        <Route path="login" element={<Login />} />
-        <Route
-          path="orders"
-          element={currentUser ? <Orders /> : <Restaurants />}
-        />
-        <Route path="cart" element={<Cart />} />
-        <Route
-          path="registration"
-          element={currentUser ? <Registration /> : <Restaurants />}
-        />
         <Route
           path="restaurants/:restaurantId"
           element={<RestaurantDetails />}
         />
         <Route path="restaurants" element={<Restaurants />} />
+
+        <Route path="cart" element={<Cart />} />
+
+        <Route
+          path="orders/:orderId"
+          element={currentUser ? <OrderDetails /> : <Restaurants />}
+        />
+        <Route
+          path="orders"
+          element={currentUser ? <Orders /> : <Restaurants />}
+        />
+
+        <Route
+          path="registration"
+          element={currentUser ? <Registration /> : <Restaurants />}
+        />
+
+        <Route path="login" element={<Login />} />
       </Routes>
     </Box>
   );
