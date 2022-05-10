@@ -3,7 +3,11 @@ import QueryBuilderIcon from "@mui/icons-material/QueryBuilder";
 import { Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { RestaurantReadDto } from "../../../../common/models/Restaurant";
-import { getNowUtcDateTime } from "../../../../common/utils/dates";
+import {
+  convertUtcMinutesToZonedTime,
+  formatUtcToZonedDate,
+  getClosestOpeningTimeToUtc,
+} from "../../../../common/utils/dates";
 import OpeningTime from "../OpeningTime";
 import classes from "./styles.module.scss";
 
@@ -22,13 +26,13 @@ export default function RestaurantCard({
   const flexDirection = orientation === "ltr" ? "row-reverse" : "row";
   const gradientDirection = orientation === "ltr" ? "left" : "right";
 
-  let currentDayOfWeek = getNowUtcDateTime().getUTCDay();
-  const todayPlaceOpeningTimes = restaurant.placeOpeningTimes.filter(
-    (openingTime) => openingTime.dayOfWeek === currentDayOfWeek
-  );
-  const todayOrderOpeningTimes = restaurant.orderOpeningTimes.filter(
-    (openingTime) => openingTime.dayOfWeek === currentDayOfWeek
-  );
+  const closestPlaceOpeningTimeToUtc = restaurant?.placeOpeningTimes
+    ? getClosestOpeningTimeToUtc(restaurant.placeOpeningTimes)
+    : undefined;
+
+  const closestOrderOpeningTimeToUtc = restaurant?.orderOpeningTimes
+    ? getClosestOpeningTimeToUtc(restaurant.orderOpeningTimes)
+    : undefined;
 
   return (
     <Box
@@ -59,36 +63,22 @@ export default function RestaurantCard({
       />
       <div className={classes.openingswrapper}>
         <div className={classes.openings}>
-          <Typography
-            mr={1}
-            sx={{
-              fontWeight: "bold",
-            }}
-          >
-            Horaires
+          <Typography mr={1}>
+            Horaires pour le{" "}
+            {closestPlaceOpeningTimeToUtc &&
+              formatUtcToZonedDate(
+                convertUtcMinutesToZonedTime(
+                  closestPlaceOpeningTimeToUtc.dayOfWeek,
+                  closestPlaceOpeningTimeToUtc.offsetInMinutes
+                ).toISOString()
+              )}
           </Typography>
           <QueryBuilderIcon></QueryBuilderIcon>
-          {todayPlaceOpeningTimes.length !== 0 ? (
-            <>
-              <Typography ml={1}>Sur place</Typography>
-              {todayPlaceOpeningTimes.map((openingTime) => (
-                <OpeningTime key={openingTime.id} openingTime={openingTime} />
-              ))}
-            </>
-          ) : (
-            <Typography mx={1}>Fermé aujourd'hui</Typography>
-          )}
+          <Typography ml={1}>Sur place</Typography>
+          <OpeningTime openingTime={closestPlaceOpeningTimeToUtc!} />
           <HourglassBottomIcon></HourglassBottomIcon>
-          {todayOrderOpeningTimes.length !== 0 ? (
-            <>
-              <Typography ml={1}>Réservez</Typography>
-              {todayOrderOpeningTimes.map((openingTime) => (
-                <OpeningTime key={openingTime.id} openingTime={openingTime} />
-              ))}
-            </>
-          ) : (
-            <Typography mx={1}>Fermé aujourd'hui</Typography>
-          )}
+          <Typography ml={1}>Réservez</Typography>
+          <OpeningTime openingTime={closestOrderOpeningTimeToUtc!} />
         </div>
       </div>
     </Box>
