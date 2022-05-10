@@ -1,4 +1,3 @@
-import { subMinutes } from "date-fns";
 import { ApiError } from "../../models/Common";
 import { parse } from "../JwtToken";
 import { getLocalStorageItem } from "../localStorage";
@@ -29,7 +28,7 @@ export async function getAuthorizedHeaders() {
   if (!accessToken) return headers;
 
   const accessTokenData = parse(accessToken);
-  if (accessTokenData.exp * 1000 < subMinutes(new Date(), 1).getTime()) {
+  if (Date.now() + 3 * 60 * 1000 > accessTokenData.exp * 1000) {
     await refreshTokensApi();
     accessToken = getLocalStorageItem("accessToken");
   }
