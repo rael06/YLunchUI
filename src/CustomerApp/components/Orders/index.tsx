@@ -58,23 +58,17 @@ export default function Orders() {
                   <TableCell sx={{ fontWeight: "bold" }}>
                     N° Réservation
                   </TableCell>
-                  <TableCell sx={{ fontWeight: "bold" }} align="center">
-                    Créée le
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: "bold" }} align="center">
+                  <TableCell sx={{ fontWeight: "bold" }}>Créée le</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>
                     Réservée pour
                   </TableCell>
-                  <TableCell sx={{ fontWeight: "bold" }} align="center">
-                    Prix total
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: "bold" }} align="center">
-                    État
-                  </TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>Prix total</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>État</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {sortedOrders.map((order) => (
-                  <OrderRow key={order.id} order={order} />
+                  <OrderRow key={order.id} order={order} withIdCell clickable />
                 ))}
               </TableBody>
             </Table>
