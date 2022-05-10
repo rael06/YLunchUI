@@ -3,6 +3,10 @@ import {
   Card,
   CardContent,
   Container,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
   Table,
   TableBody,
   TableCell,
@@ -12,7 +16,6 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { toDate } from "date-fns-tz";
 import React from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { useQuery } from "react-query";
@@ -23,6 +26,11 @@ import useAsyncAction from "../../../common/hooks/useAsyncAction";
 import useCurrentUser from "../../../common/hooks/useCurrentUser";
 import { ApiError } from "../../../common/models/Common";
 import { translateApiErrors } from "../../../common/translations/apiErrors";
+import {
+  convertUtcMinutesToZonedTime,
+  formatUtcMinutesToZonedTime,
+  getNowUtcDateTime,
+} from "../../../common/utils/dates";
 import useCart from "../../hooks/useCart";
 import { addOrderApi } from "../../services/api/orders";
 import { getRestaurantByIdApi } from "../../services/api/restaurants";
@@ -39,6 +47,7 @@ export default function Cart() {
     React.useState(false);
   const { currentUser } = useCurrentUser();
   const { register, handleSubmit } = useForm<Inputs>({ mode: "onBlur" });
+
   const {
     actAsync,
     status,
@@ -50,7 +59,40 @@ export default function Cart() {
     () => getRestaurantByIdApi(cart.restaurantId)
   );
 
-  const [isOrderSucceed, setIsOrderSucceed] = React.useState(false);
+  const [reservedForTime, setReservedForTime] = React.useState(
+    (restaurant?.placeOpeningTimes &&
+      formatUtcMinutesToZonedTime(
+        restaurant.placeOpeningTimes.filter(
+          (placeOpeningTime) => placeOpeningTime.dayOfWeek === 3
+        )[0].offsetInMinutes
+      )) ||
+      ""
+  );
+
+  const nextPlaceOpeningTime = restaurant?.placeOpeningTimes?.filter(
+    (o) =>
+      convertUtcMinutesToZonedTime(o.dayOfWeek, o.offsetInMinutes).getTime() >
+      getNowUtcDateTime().getTime()
+  )[0];
+
+  function getReservedForTimeOptions() {
+    let options: Record<string, Date> = {};
+    if (nextPlaceOpeningTime) {
+      for (let i = 0; i <= nextPlaceOpeningTime.durationInMinutes; i += 15) {
+        options = {
+          ...options,
+          [formatUtcMinutesToZonedTime(
+            nextPlaceOpeningTime.offsetInMinutes + i
+          )]: convertUtcMinutesToZonedTime(
+            nextPlaceOpeningTime.dayOfWeek,
+            nextPlaceOpeningTime.offsetInMinutes + i
+          ),
+        };
+      }
+    }
+    return options;
+  }
+  const reservedForTimeOptions = getReservedForTimeOptions();
 
   const isCartEmpty = cart.items.length < 1;
 
@@ -63,19 +105,28 @@ export default function Cart() {
     if (!currentUser) {
       setIsNotLoggedInWhenConfirmOrder(true);
     } else {
+      let orderId: string;
       await actAsync({
-        asyncAction: async () =>
-          await addOrderApi(cart.restaurantId, {
+        asyncAction: async () => {
+          const order = await addOrderApi(cart.restaurantId, {
             productIds: cart.items
               .map((item) => Array(item.quantity).fill(item.product.id))
               .flat(),
             customerComment: formData.customerComment,
-            reservedForDateTime: toDate(
-              "2022-05-12T11:55:50.857+02:00"
-            ).toISOString(),
-          }),
-        onSuccessAsync: async () => setIsOrderSucceed(true),
-        onSuccessTimeoutAsync: async () => clear(),
+            reservedForDateTime:
+              reservedForTimeOptions[reservedForTime].toISOString(),
+          });
+          orderId = order.id;
+        },
+        onSuccessTimeoutAsync: async () => {
+          clear();
+          navigate("/customer/orders", {
+            state: {
+              isFromConfirmCart: true,
+              message: `Votre réservation N° ${orderId} a bien été enregistrée, elle est en attente d'acceptation par le restaurant.`,
+            },
+          });
+        },
       });
     }
   }
@@ -153,7 +204,28 @@ export default function Cart() {
                     label="Commentaire"
                     name="customerComment"
                   />
-                  <Box sx={{ display: "flex" }}>
+                  <FormControl variant="filled" sx={{ width: 250 }}>
+                    <InputLabel id="reserved-for-time-label">
+                      Horaire de retrait souhaité
+                    </InputLabel>
+                    {restaurant && (
+                      <Select
+                        labelId="reserved-for-time-label"
+                        id="reserved-for-time"
+                        value={reservedForTime}
+                        onChange={(e) => setReservedForTime(e.target.value)}
+                      >
+                        {Object.keys(reservedForTimeOptions).map(
+                          (optionKey) => (
+                            <MenuItem key={optionKey} value={optionKey}>
+                              {optionKey}
+                            </MenuItem>
+                          )
+                        )}
+                      </Select>
+                    )}
+                  </FormControl>
+                  <Box sx={{ display: "flex", marginTop: 2 }}>
                     <ProgressButton
                       label="Confirmer la réservation"
                       sx={{ marginTop: "10px" }}
@@ -181,20 +253,6 @@ export default function Cart() {
                       connecter
                     </span>{" "}
                     pour enregistrer votre réservation.
-                  </Typography>
-                )}
-                {currentUser && isOrderSucceed && (
-                  <Typography>
-                    Votre réservation a bien été enregistrée, elle est en
-                    attente d'acceptation par le restaurant. Vous pouvez
-                    consulter son avancée dans la section{" "}
-                    <span
-                      onClick={() => navigate("/customer/orders")}
-                      style={{ cursor: "pointer", color: "#1976d2" }}
-                    >
-                      Mes réservations
-                    </span>
-                    .
                   </Typography>
                 )}
                 <Typography
