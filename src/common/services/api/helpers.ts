@@ -1,6 +1,6 @@
 import { ApiError } from "../../models/Common";
 import { parse } from "../JwtToken";
-import { getLocalStorageItem } from "../localStorage";
+import { getLocalStorageItem, removeLocalStorageItem } from "../localStorage";
 import { refreshTokensApi } from "./authentication";
 
 // export const apiUrl = "http://localhost:5254";
@@ -46,6 +46,12 @@ export async function processResponse<TResponseDto>(response: Response) {
       return {} as TResponseDto;
     }
   }
+
+  if (response.status === 401) {
+    removeLocalStorageItem("accessToken");
+    removeLocalStorageItem("refreshToken");
+  }
+
   const error = (await response.json()) as ApiError;
   throw error;
 }

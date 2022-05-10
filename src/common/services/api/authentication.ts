@@ -56,8 +56,6 @@ export async function refreshTokensApi(): Promise<void> {
       setLocalStorageItem("refreshToken", data.refreshToken);
     })
     .catch((error: ApiError) => {
-      removeLocalStorageItem("accessToken");
-      removeLocalStorageItem("refreshToken");
       throw error;
     });
 }
