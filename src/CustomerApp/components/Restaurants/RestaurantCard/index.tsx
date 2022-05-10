@@ -3,6 +3,7 @@ import QueryBuilderIcon from "@mui/icons-material/QueryBuilder";
 import { Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { RestaurantReadDto } from "../../../../common/models/Restaurant";
+import { getNowUtcDateTime } from "../../../../common/utils/dates";
 import OpeningTime from "../OpeningTime";
 import classes from "./styles.module.scss";
 
@@ -21,7 +22,7 @@ export default function RestaurantCard({
   const flexDirection = orientation === "ltr" ? "row-reverse" : "row";
   const gradientDirection = orientation === "ltr" ? "left" : "right";
 
-  let currentDayOfWeek = 3;
+  let currentDayOfWeek = getNowUtcDateTime().getUTCDay();
   const todayPlaceOpeningTimes = restaurant.placeOpeningTimes.filter(
     (openingTime) => openingTime.dayOfWeek === currentDayOfWeek
   );

@@ -29,7 +29,8 @@ import { translateApiErrors } from "../../../common/translations/apiErrors";
 import {
   convertUtcMinutesToZonedTime,
   formatUtcMinutesToZonedTime,
-  getNowUtcDateTime,
+  formatUtcToZonedDate,
+  getClosestOpeningTimeToUtc,
 } from "../../../common/utils/dates";
 import { getSimpleId } from "../../../common/utils/id";
 import useCart from "../../hooks/useCart";
@@ -60,28 +61,27 @@ export default function Cart() {
     () => getRestaurantByIdApi(cart.restaurantId)
   );
 
-  const currentPlaceOpeningTime = restaurant?.placeOpeningTimes?.find((o) => {
-    return (
-      convertUtcMinutesToZonedTime(o.dayOfWeek, o.offsetInMinutes).getTime() >
-      getNowUtcDateTime().getTime()
-    );
-  });
+  const closestOpeningTimeToUtc = restaurant?.placeOpeningTimes
+    ? getClosestOpeningTimeToUtc(restaurant.placeOpeningTimes)
+    : undefined;
 
   const [reservedForTime, setReservedForTime] = React.useState(
-    currentPlaceOpeningTime?.offsetInMinutes || ""
+    closestOpeningTimeToUtc?.offsetInMinutes
+      ? formatUtcMinutesToZonedTime(closestOpeningTimeToUtc.offsetInMinutes)
+      : ""
   );
 
   function getReservedForTimeOptions() {
     let options: Record<string, Date> = {};
-    if (currentPlaceOpeningTime) {
-      for (let i = 0; i <= currentPlaceOpeningTime.durationInMinutes; i += 15) {
+    if (closestOpeningTimeToUtc) {
+      for (let i = 0; i <= closestOpeningTimeToUtc.durationInMinutes; i += 15) {
         options = {
           ...options,
           [formatUtcMinutesToZonedTime(
-            currentPlaceOpeningTime.offsetInMinutes + i
+            closestOpeningTimeToUtc.offsetInMinutes + i
           )]: convertUtcMinutesToZonedTime(
-            currentPlaceOpeningTime.dayOfWeek,
-            currentPlaceOpeningTime.offsetInMinutes + i
+            closestOpeningTimeToUtc.dayOfWeek,
+            closestOpeningTimeToUtc.offsetInMinutes + i
           ),
         };
       }
@@ -198,6 +198,16 @@ export default function Cart() {
                     label="Commentaire"
                     name="customerComment"
                   />
+                  <Typography mb={1}>
+                    Veuillez selectionner un horaire de retrait pour le{" "}
+                    {closestOpeningTimeToUtc &&
+                      formatUtcToZonedDate(
+                        convertUtcMinutesToZonedTime(
+                          closestOpeningTimeToUtc.dayOfWeek,
+                          closestOpeningTimeToUtc.offsetInMinutes
+                        ).toISOString()
+                      )}
+                  </Typography>
                   <FormControl variant="filled" sx={{ width: 250 }}>
                     <InputLabel id="reserved-for-time-label">
                       Horaire de retrait souhaité

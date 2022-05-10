@@ -41,7 +41,7 @@ export default function Body() {
 
         <Route
           path="registration"
-          element={currentUser ? <Registration /> : <Restaurants />}
+          element={!currentUser ? <Registration /> : <Restaurants />}
         />
 
         <Route path="login" element={<Login />} />

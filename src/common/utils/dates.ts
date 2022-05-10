@@ -1,3 +1,4 @@
+import { OpeningTimeReadDto } from "./../models/Restaurant";
 import { addDays } from "date-fns";
 import { format, toDate, utcToZonedTime } from "date-fns-tz";
 
@@ -96,4 +97,25 @@ export function compareUtcDateTime(
       convertUtcToZonedDateTime(date2).getTime()) *
     (by === "ascending" ? 1 : -1)
   );
+}
+
+export function getClosestOpeningTimeToUtc(openingTimes: OpeningTimeReadDto[]) {
+  return openingTimes
+    .filter(
+      (o) =>
+        convertUtcMinutesToZonedTime(
+          o.dayOfWeek,
+          o.offsetInMinutes + o.durationInMinutes
+        ).getTime() > getNowUtcDateTime().getTime()
+    )
+    .map((o) => {
+      return {
+        time: convertUtcMinutesToZonedTime(
+          o.dayOfWeek,
+          o.offsetInMinutes
+        ).getTime(),
+        value: o,
+      };
+    })
+    .sort((d1, d2) => d1.time - d2.time)[0].value;
 }
