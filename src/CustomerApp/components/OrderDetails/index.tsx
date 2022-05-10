@@ -16,6 +16,7 @@ import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { getSimpleId } from "../../../common/utils/id";
 import { getOrderByIdApi } from "../../services/api/orders";
+import { getRestaurantByIdApi } from "../../services/api/restaurants";
 import OrderRow from "../Orders/OrderRow";
 import OrderedItemRow, { OrderedItem } from "./OrderedItemRow";
 
@@ -28,7 +29,16 @@ export default function RestaurantDetails() {
     getOrderByIdApi(orderId!)
   );
 
-  if (!orderId || !order) {
+  const { data: restaurant } = useQuery(
+    `restaurants/${order?.restaurantId}`,
+    () => {
+      if (order) {
+        return getRestaurantByIdApi(order.restaurantId);
+      }
+    }
+  );
+
+  if (!orderId || !order || !restaurant) {
     return <></>;
   }
 
@@ -57,6 +67,10 @@ export default function RestaurantDetails() {
       <Card>
         <Container maxWidth="md">
           <CardContent>
+            <Typography mb={5} variant="h4" component="h1">
+              {restaurant.name}
+            </Typography>
+
             <Box mb={5}>
               <Typography sx={{ fontWeight: "bold" }}>Informations</Typography>
               <TableContainer>

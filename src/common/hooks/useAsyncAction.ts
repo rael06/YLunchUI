@@ -20,34 +20,37 @@ function useAsyncAction<TError>() {
   const [status, setStatus] = React.useState<AsyncActionStatus>("idle");
   const [error, setError] = React.useState<TError>();
 
-  async function actAsync({
-    asyncAction,
-    onSuccessAsync = async () => {},
-    onSuccessTimeoutAsync = async () => {},
-    onErrorAsync = async () => {},
-    onErrorTimeoutAsync = async () => {},
-    successRecoveryTimeout = defaultSuccessRecoveryTimeout,
-    errorRecoveryTimeout = defaultErrorRecoveryTimeout,
-  }: ActAsyncParams<TError>) {
-    setStatus("loading");
-    try {
-      await asyncAction();
-      setStatus("success");
-      await onSuccessAsync();
-      setTimeout(async () => {
-        setStatus("idle");
-        await onSuccessTimeoutAsync();
-      }, successRecoveryTimeout);
-    } catch (error) {
-      setStatus("error");
-      setError(error as TError);
-      await onErrorAsync(error as TError);
-      setTimeout(async () => {
-        setStatus("idle");
-        await onErrorTimeoutAsync();
-      }, errorRecoveryTimeout);
-    }
-  }
+  const actAsync = React.useCallback(
+    async ({
+      asyncAction,
+      onSuccessAsync = async () => {},
+      onSuccessTimeoutAsync = async () => {},
+      onErrorAsync = async () => {},
+      onErrorTimeoutAsync = async () => {},
+      successRecoveryTimeout = defaultSuccessRecoveryTimeout,
+      errorRecoveryTimeout = defaultErrorRecoveryTimeout,
+    }: ActAsyncParams<TError>) => {
+      setStatus("loading");
+      try {
+        await asyncAction();
+        setStatus("success");
+        await onSuccessAsync();
+        setTimeout(async () => {
+          setStatus("idle");
+          await onSuccessTimeoutAsync();
+        }, successRecoveryTimeout);
+      } catch (error) {
+        setStatus("error");
+        setError(error as TError);
+        await onErrorAsync(error as TError);
+        setTimeout(async () => {
+          setStatus("idle");
+          await onErrorTimeoutAsync();
+        }, errorRecoveryTimeout);
+      }
+    },
+    [setStatus, setError]
+  );
 
   return { actAsync, status, error };
 }

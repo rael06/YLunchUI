@@ -31,6 +31,7 @@ import {
   formatUtcMinutesToZonedTime,
   getNowUtcDateTime,
 } from "../../../common/utils/dates";
+import { getSimpleId } from "../../../common/utils/id";
 import useCart from "../../hooks/useCart";
 import { addOrderApi } from "../../services/api/orders";
 import { getRestaurantByIdApi } from "../../services/api/restaurants";
@@ -59,33 +60,28 @@ export default function Cart() {
     () => getRestaurantByIdApi(cart.restaurantId)
   );
 
-  const [reservedForTime, setReservedForTime] = React.useState(
-    (restaurant?.placeOpeningTimes &&
-      formatUtcMinutesToZonedTime(
-        restaurant.placeOpeningTimes.filter(
-          (placeOpeningTime) => placeOpeningTime.dayOfWeek === 3
-        )[0].offsetInMinutes
-      )) ||
-      ""
-  );
-
-  const nextPlaceOpeningTime = restaurant?.placeOpeningTimes?.filter(
-    (o) =>
+  const currentPlaceOpeningTime = restaurant?.placeOpeningTimes?.find((o) => {
+    return (
       convertUtcMinutesToZonedTime(o.dayOfWeek, o.offsetInMinutes).getTime() >
       getNowUtcDateTime().getTime()
-  )[0];
+    );
+  });
+
+  const [reservedForTime, setReservedForTime] = React.useState(
+    currentPlaceOpeningTime?.offsetInMinutes || ""
+  );
 
   function getReservedForTimeOptions() {
     let options: Record<string, Date> = {};
-    if (nextPlaceOpeningTime) {
-      for (let i = 0; i <= nextPlaceOpeningTime.durationInMinutes; i += 15) {
+    if (currentPlaceOpeningTime) {
+      for (let i = 0; i <= currentPlaceOpeningTime.durationInMinutes; i += 15) {
         options = {
           ...options,
           [formatUtcMinutesToZonedTime(
-            nextPlaceOpeningTime.offsetInMinutes + i
+            currentPlaceOpeningTime.offsetInMinutes + i
           )]: convertUtcMinutesToZonedTime(
-            nextPlaceOpeningTime.dayOfWeek,
-            nextPlaceOpeningTime.offsetInMinutes + i
+            currentPlaceOpeningTime.dayOfWeek,
+            currentPlaceOpeningTime.offsetInMinutes + i
           ),
         };
       }
@@ -123,7 +119,9 @@ export default function Cart() {
           navigate("/customer/orders", {
             state: {
               isFromConfirmCart: true,
-              message: `Votre réservation N° ${orderId} a bien été enregistrée, elle est en attente d'acceptation par le restaurant.`,
+              message: `Votre réservation N° ${getSimpleId(
+                orderId
+              )} a bien été enregistrée, elle est en attente d'acceptation par le restaurant.`,
             },
           });
         },
@@ -141,10 +139,13 @@ export default function Cart() {
       <Typography mb={2} variant="h2" component="h1">
         Mon panier
       </Typography>
-      {cart.items.length > 0 ? (
+      {cart.items.length > 0 && restaurant ? (
         <Card>
           <Container maxWidth="md">
             <CardContent>
+              <Typography mb={2} variant="h4" component="h1">
+                {restaurant.name}
+              </Typography>
               <TableContainer>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                   <TableHead>

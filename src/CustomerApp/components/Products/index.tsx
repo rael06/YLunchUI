@@ -9,7 +9,7 @@ type Props = {
 };
 
 export default function Products({ restaurantId }: Props) {
-  const { data: products } = useQuery("products", () =>
+  const { data: products } = useQuery(`${restaurantId}/products`, () =>
     getProductsApi({ restaurantId: restaurantId! })
   );
 

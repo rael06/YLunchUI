@@ -15,8 +15,8 @@ import { getOrdersApi } from "../../services/api/orders";
 import OrderRow from "./OrderRow";
 
 export default function Orders() {
-  const { data: orders } = useQuery("orders", () => getOrdersApi());
   const location = useLocation();
+  const { data: orders } = useQuery("orders", () => getOrdersApi());
 
   if (!orders) {
     return <></>;
@@ -58,6 +58,7 @@ export default function Orders() {
                   <TableCell sx={{ fontWeight: "bold" }}>
                     N° Réservation
                   </TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>Restaurant</TableCell>
                   <TableCell sx={{ fontWeight: "bold" }}>Créée le</TableCell>
                   <TableCell sx={{ fontWeight: "bold" }}>
                     Réservée pour
@@ -68,7 +69,12 @@ export default function Orders() {
               </TableHead>
               <TableBody>
                 {sortedOrders.map((order) => (
-                  <OrderRow key={order.id} order={order} withIdCell clickable />
+                  <OrderRow
+                    key={order.id}
+                    order={order}
+                    withIdAndRestaurantName
+                    clickable
+                  />
                 ))}
               </TableBody>
             </Table>

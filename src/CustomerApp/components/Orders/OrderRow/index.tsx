@@ -1,22 +1,33 @@
 import { TableCell, TableRow } from "@mui/material";
+import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { translateOrderState } from "../../../../common/translations/orderState";
 import { formatUtcToZonedDateTime } from "../../../../common/utils/dates";
 import { getSimpleId } from "../../../../common/utils/id";
 import { OrderReadDto } from "../../../models/Order";
+import { getRestaurantByIdApi } from "../../../services/api/restaurants";
 
 type Props = {
   order: OrderReadDto;
-  withIdCell?: boolean;
+  withIdAndRestaurantName?: boolean;
   clickable?: boolean;
 };
 
 export default function OrderRow({
   order,
-  withIdCell = false,
+  withIdAndRestaurantName = false,
   clickable = false,
 }: Props) {
   const navigate = useNavigate();
+
+  const { data: restaurant } = useQuery(
+    `restaurants/${order.restaurantId}`,
+    () => {
+      if (order) {
+        return getRestaurantByIdApi(order.restaurantId);
+      }
+    }
+  );
 
   return (
     <TableRow
@@ -31,10 +42,13 @@ export default function OrderRow({
         }
       }}
     >
-      {withIdCell && (
-        <TableCell component="th" scope="row">
-          {getSimpleId(order.id)}
-        </TableCell>
+      {withIdAndRestaurantName && (
+        <>
+          <TableCell component="th" scope="row">
+            {getSimpleId(order.id)}
+          </TableCell>
+          <TableCell>{restaurant?.name}</TableCell>
+        </>
       )}
       <TableCell>{formatUtcToZonedDateTime(order.creationDateTime)}</TableCell>
       <TableCell>
