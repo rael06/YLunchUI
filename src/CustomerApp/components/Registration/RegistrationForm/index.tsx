@@ -83,7 +83,7 @@ export default function RegistrationForm() {
         label="Prénom*"
         name="firstname"
         // Todo remove initialValue
-        initialValue="firstname"
+        // initialValue="firstname"
         rules={{
           required: "Ce champs est requis",
           pattern: {
@@ -99,7 +99,7 @@ export default function RegistrationForm() {
         label="Nom*"
         name="lastname"
         // Todo remove initialValue
-        initialValue="lastname"
+        // initialValue="lastname"
         rules={{
           required: "Ce champs est requis",
           pattern: {
@@ -115,7 +115,7 @@ export default function RegistrationForm() {
         label="Téléphone*"
         name="phoneNumber"
         // Todo remove initialValue
-        initialValue="0612345678"
+        // initialValue="0612345678"
         rules={{
           required: "Ce champs est requis",
           pattern: {
@@ -131,7 +131,7 @@ export default function RegistrationForm() {
         label="Adresse mail*"
         name="email"
         // Todo remove initialValue
-        initialValue="firstname.lastname@ynov.com"
+        // initialValue="firstname.lastname@ynov.com"
         rules={{
           required: "Ce champs est requis",
           pattern: {
@@ -148,7 +148,7 @@ export default function RegistrationForm() {
         name="password"
         type="password"
         // Todo remove initialValue
-        initialValue={"Password1234."}
+        // initialValue={"Password1234."}
         rules={{
           required: "Ce champs est requis",
           pattern: {
@@ -165,7 +165,7 @@ export default function RegistrationForm() {
         name="passwordConfirm"
         type="password"
         // Todo remove initialValue
-        initialValue={"Password1234."}
+        // initialValue={"Password1234."}
         rules={{
           required: "Ce champs est requis",
           validate: {

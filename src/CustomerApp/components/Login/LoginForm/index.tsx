@@ -84,7 +84,7 @@ export default function LoginForm() {
         label="Adresse mail*"
         name="email"
         // Todo remove initialValue
-        initialValue="firstname.lastname@ynov.com"
+        // initialValue="firstname.lastname@ynov.com"
         rules={{
           required: "Ce champs est requis",
           pattern: {
@@ -101,7 +101,7 @@ export default function LoginForm() {
         name="password"
         type="password"
         // Todo remove initialValue
-        initialValue={"Password1234."}
+        // initialValue={"Password1234."}
         rules={{
           required: "Ce champs est requis",
         }}

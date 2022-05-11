@@ -144,7 +144,7 @@ export default function RestaurantDetails() {
                 )}
               </Box>
               <Typography sx={{ fontWeight: "bold" }}>
-                Commantaire du restaurant :
+                Commentaire du restaurant :
               </Typography>
               {order.restaurantComment ? (
                 <Typography>{order.restaurantComment}</Typography>
