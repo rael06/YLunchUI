@@ -31,6 +31,7 @@ import {
   formatUtcMinutesToZonedTime,
   formatUtcToZonedDate,
   getClosestOpeningTimeToUtc,
+  getNowUtcDateTime,
 } from "../../../common/utils/dates";
 import { getSimpleId } from "../../../common/utils/id";
 import useCart from "../../hooks/useCart";
@@ -65,30 +66,38 @@ export default function Cart() {
     ? getClosestOpeningTimeToUtc(restaurant.placeOpeningTimes)
     : undefined;
 
-  const [reservedForTime, setReservedForTime] = React.useState(
-    closestOpeningTimeToUtc?.offsetInMinutes
-      ? formatUtcMinutesToZonedTime(closestOpeningTimeToUtc.offsetInMinutes)
-      : ""
-  );
-
   function getReservedForTimeOptions() {
     let options: Record<string, Date> = {};
     if (closestOpeningTimeToUtc) {
       for (let i = 0; i <= closestOpeningTimeToUtc.durationInMinutes; i += 15) {
-        options = {
-          ...options,
-          [formatUtcMinutesToZonedTime(
-            closestOpeningTimeToUtc.offsetInMinutes + i
-          )]: convertUtcMinutesToZonedTime(
+        if (
+          convertUtcMinutesToZonedTime(
             closestOpeningTimeToUtc.dayOfWeek,
             closestOpeningTimeToUtc.offsetInMinutes + i
-          ),
-        };
+          ).getTime() > getNowUtcDateTime().getTime()
+        ) {
+          options = {
+            ...options,
+            [formatUtcMinutesToZonedTime(
+              closestOpeningTimeToUtc.offsetInMinutes + i
+            )]: convertUtcMinutesToZonedTime(
+              closestOpeningTimeToUtc.dayOfWeek,
+              closestOpeningTimeToUtc.offsetInMinutes + i
+            ),
+          };
+        }
       }
     }
     return options;
   }
   const reservedForTimeOptions = getReservedForTimeOptions();
+
+  const [reservedForTime, setReservedForTime] = React.useState(() => {
+    const reservedForTimeOptionsKeys = Object.keys(reservedForTimeOptions);
+    return reservedForTimeOptionsKeys.length > 0
+      ? reservedForTimeOptionsKeys[0]
+      : "";
+  });
 
   const isCartEmpty = cart.items.length < 1;
 
@@ -261,9 +270,12 @@ export default function Cart() {
                   visibility={
                     addOrderApiError &&
                     addOrderApiError.status === 400 &&
-                    addOrderApiError.errors.reasons.includes(
-                      "ReservedForDateTime must be set when the restaurant is open for orders."
-                    )
+                    (addOrderApiError.errors.reasons?.includes(
+                      "ReservedForDateTime must be set when the restaurant is open in place."
+                    ) ||
+                      addOrderApiError.errors.reasons?.includes(
+                        "ReservedForDateTime must be in future if present."
+                      ))
                       ? "visible"
                       : "hidden"
                   }
@@ -276,8 +288,8 @@ export default function Cart() {
                   visibility={
                     addOrderApiError &&
                     addOrderApiError.status === 400 &&
-                    !addOrderApiError.errors.reasons.includes(
-                      "ReservedForDateTime must be set when the restaurant is open for orders."
+                    !addOrderApiError.errors.reasons?.includes(
+                      "ReservedForDateTime must be set when the restaurant is open in place."
                     )
                       ? "visible"
                       : "hidden"
