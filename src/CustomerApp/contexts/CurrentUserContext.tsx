@@ -4,7 +4,6 @@ import {
   LoginRequestDto,
   UserReadDto,
 } from "../../common/models/Authentication";
-import { ApiError } from "../../common/models/Common";
 import {
   loginApi,
   getCurrentUserApi,
