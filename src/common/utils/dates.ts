@@ -27,7 +27,7 @@ export function formatUtcToZonedTime(date: string) {
 export function formatUtcMinutesToZonedTime(minutes: number) {
   const utcDate = toDate(new Date());
   const yyyy = utcDate.getUTCFullYear();
-  const MM = utcDate.getUTCMonth().toString().padStart(2, "0");
+  const MM = (utcDate.getUTCMonth() + 1).toString().padStart(2, "0");
   const dd = utcDate.getUTCDate().toString().padStart(2, "0");
   const hh = String(Math.floor(minutes / 60)).padStart(2, "0");
   const mm = String(minutes % 60).padStart(2, "0");
