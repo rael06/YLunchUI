@@ -18,6 +18,12 @@ export function formatUtcToZonedDate(date: string) {
   });
 }
 
+export function formatUtcToZonedDateDDMM(date: string) {
+  return format(toDate(parseUtcString(date)), "dd/MM", {
+    timeZone: "Europe/Paris",
+  });
+}
+
 export function formatUtcToZonedTime(date: string) {
   return format(toDate(parseUtcString(date)), "HH:mm", {
     timeZone: "Europe/Paris",

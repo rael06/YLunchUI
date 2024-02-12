@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { RestaurantReadDto } from "../../../../common/models/Restaurant";
 import {
   convertUtcMinutesToZonedTime,
-  formatUtcToZonedDate,
+  formatUtcToZonedDateDDMM,
   getClosestOpeningTimeToUtc,
 } from "../../../../common/utils/dates";
 import OpeningTime from "../OpeningTime";
@@ -66,7 +66,7 @@ export default function RestaurantCard({
           <Typography mr={1}>
             Horaires pour le{" "}
             {closestPlaceOpeningTimeToUtc &&
-              formatUtcToZonedDate(
+              formatUtcToZonedDateDDMM(
                 convertUtcMinutesToZonedTime(
                   closestPlaceOpeningTimeToUtc.dayOfWeek,
                   closestPlaceOpeningTimeToUtc.offsetInMinutes

@@ -59,7 +59,7 @@ export default function Header() {
       </Box>
 
       {status !== "loading" && (
-        <Box sx={{ display: "flex" }}>
+        <Box sx={{ display: "flex", flexWrap: "wrap-reverse" }}>
           <Button
             sx={{ marginRight: 1 }}
             onClick={() => navigate("restaurants")}
