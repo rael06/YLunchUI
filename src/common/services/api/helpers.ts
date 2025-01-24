@@ -3,7 +3,7 @@ import { parse } from "../JwtToken";
 import { getLocalStorageItem, removeLocalStorageItem } from "../localStorage";
 import { refreshTokensApi } from "./authentication";
 
-// export const apiUrl = "http://localhost:5254";
+// export const apiUrl = "http://localhost:5258";
 export const apiUrl = "https://ylunch-api.rael-calitro.ovh";
 
 type RestMethod = "post" | "get" | "patch" | "put" | "delete";

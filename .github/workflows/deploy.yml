@@ -6,14 +6,14 @@ on:
     branches:
       - master
 
-jobs:          
+jobs:
   deploy:
     name: Call Azure Pipeline
     runs-on: ubuntu-latest
     steps:
-    - name: Azure Pipelines Action
-      uses: Azure/pipelines@v1
-      with:
-        azure-devops-project-url: https://dev.azure.com/ylunch/YnovYLunch
-        azure-pipeline-name: 'YnovYLunchUI-CI'
-        azure-devops-token: ${{ secrets.AZURE_DEVOPS_TOKEN }}
+      - name: Azure Pipelines Action
+        uses: Azure/pipelines@v1
+        with:
+          azure-devops-project-url: https://dev.azure.com/rael06/YLunchUI
+          azure-pipeline-name: "YLunchUI-CI"
+          azure-devops-token: ${{ secrets.AZURE_DEVOPS_TOKEN }}
