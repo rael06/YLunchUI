@@ -1,0 +1,55 @@
+# Builds every push and pull request; on master, deploys the build to Cloudflare Workers.
+# The Cloudflare token lives in the GitHub environment `production` (Settings → Environments);
+# « Run workflow » on master redeploys without a commit. See « Deployment » in the README.
+name: CI/CD
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      # Create React App 5: built with Node 20, as it was on Azure (same files, byte for byte).
+      # CI=true (set by GitHub) turns lint warnings into errors.
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+
+  deploy:
+    needs: check
+    # DEPLOY_ENABLED is a repository variable: the switch to stop deployments.
+    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request' && vars.DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    environment: production
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      # Wrangler needs a current Node.
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "4.143.0"
+          command: deploy
