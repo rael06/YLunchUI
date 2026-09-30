@@ -44,3 +44,13 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+## Deployment
+
+The site runs at `https://ylunch.rael-calitro.ovh` on [Cloudflare Workers](https://developers.cloudflare.com/workers/static-assets/) (static assets only, `wrangler.jsonc`, SPA fallback to `index.html`).
+
+GitHub Actions (`.github/workflows/ci-cd.yml`) builds every push and pull request with Node 20 (Create React App 5), and on `master` deploys `build/` with Wrangler.
+
+- Settings: GitHub environment `production`, restricted to `master`: secret `CLOUDFLARE_API_TOKEN` (account token from the « Edit Cloudflare Workers » template, zone rule limited to `rael-calitro.ovh`), variable `CLOUDFLARE_ACCOUNT_ID`.
+- The repository variable `DEPLOY_ENABLED` (`true`/`false`) turns deployments on or off.
+- Rollback: Cloudflare → Workers & Pages → `ylunch` → Deployments, or `wrangler rollback`.

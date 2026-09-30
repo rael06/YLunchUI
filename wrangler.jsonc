@@ -1,0 +1,18 @@
+// Cloudflare Workers (static assets only, no server code): serves the React build on the custom
+// domain. Deployed by .github/workflows/ci-cd.yml; see « Deployment » in the README.
+{
+  "$schema": "https://unpkg.com/wrangler@4.143.0/config-schema.json",
+  "name": "ylunch",
+  "compatibility_date": "2026-09-29",
+  "assets": {
+    "directory": "./build",
+    // Client-side routing: navigation requests without a matching file get index.html.
+    "not_found_handling": "single-page-application"
+  },
+  "routes": [
+    { "pattern": "ylunch.rael-calitro.ovh", "custom_domain": true }
+  ],
+  // Only the custom domain: no public copy on *.workers.dev.
+  "workers_dev": false,
+  "preview_urls": false
+}
